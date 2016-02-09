@@ -1,0 +1,11 @@
+.board-button {
+    -fx-font: 20px "Serif";
+}
+
+.board-button {
+	-fx-color: white;
+}
+
+.border {
+	-fx-color: grey;
+}
