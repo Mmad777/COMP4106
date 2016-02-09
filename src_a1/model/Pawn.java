@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Pawn extends BoardEntity {
@@ -21,6 +22,8 @@ public class Pawn extends BoardEntity {
 
 	public Pawn(int x, int y, MoveDirection moveDirection) {
 		super(x, y);
+		this.initialX = x;
+		this.initialY = y;
 		this.moveDirection = moveDirection;
 	}
 
@@ -55,8 +58,16 @@ public class Pawn extends BoardEntity {
 
 	@Override
 	public List<Position> getPossibleMoves() {
-		// TODO Auto-generated method stub
-		return null;
+
+		List<Position> moves = new ArrayList<Position>();
+		switch (moveDirection) {
+			case LEFT:
+				break;
+		
+		}
+		
+		return moves;
+		
 	}
 
 }

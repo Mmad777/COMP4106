@@ -12,4 +12,8 @@ public class Node {
 		this.state = state;
 	}
 
+	public BoardState getState() {
+		return state;
+	}
+
 }
