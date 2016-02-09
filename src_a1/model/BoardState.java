@@ -7,15 +7,19 @@ import java.util.stream.IntStream;
 
 import model.Pawn.MoveDirection;
 
-public class Board {
+public class BoardState {
 	
 	public final static int SIZE = 15;
 	private final int NUM_PAWNS = 5;
 	
 	private List<BoardEntity> boardEntities;
 	
-	public Board() {
+	public BoardState() {
 		generateBoard();
+	}
+	
+	public BoardEntity getBoardEntity(int x, int y) {
+		return boardEntities.stream().filter(e -> e.getPosition().getX() == x && e.getPosition().getY() == y).findFirst().get();
 	}
 	
 	public List<BoardEntity> getBoardEntities() {

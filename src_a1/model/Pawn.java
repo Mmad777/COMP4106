@@ -1,5 +1,7 @@
 package model;
 
+import java.util.List;
+
 public class Pawn extends BoardEntity {
 
 	public enum MoveDirection {
@@ -27,46 +29,34 @@ public class Pawn extends BoardEntity {
 		return "P" + "[" + moveDirection.toString().charAt(0) + "]";
 	}
 
-	/**
-	 * @return the moveDirection
-	 */
 	public MoveDirection getMoveDirection() {
 		return moveDirection;
 	}
 
-	/**
-	 * @param moveDirection the moveDirection to set
-	 */
 	public void setMoveDirection(MoveDirection moveDirection) {
 		this.moveDirection = moveDirection;
 	}
 
-	/**
-	 * @return the initialX
-	 */
 	public int getInitialX() {
 		return initialX;
 	}
 
-	/**
-	 * @param initialX the initialX to set
-	 */
 	public void setInitialX(int initialX) {
 		this.initialX = initialX;
 	}
 
-	/**
-	 * @return the initialY
-	 */
 	public int getInitialY() {
 		return initialY;
 	}
 
-	/**
-	 * @param initialY the initialY to set
-	 */
 	public void setInitialY(int initialY) {
 		this.initialY = initialY;
+	}
+
+	@Override
+	public List<Position> getPossibleMoves() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

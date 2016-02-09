@@ -1,9 +1,12 @@
 package application;
 
+import java.util.List;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-import model.Board;
+import model.BoardEntity.Position;
+import model.BoardState;
 
 public class MainView {
 	
@@ -22,12 +25,25 @@ public class MainView {
 		return scene;
 	}
 	
-	public void update(Board board) {
+	public Button[][] getButtons() {
+		return buttons;
+	}
+	
+	public void update(BoardState board) {
 		
 		board.getBoardEntities().stream().forEach(e -> {
-			buttons[e.getX()][e.getY()].setText(e.getIcon());
+			Button btn = buttons[e.getPosition().getX()][e.getPosition().getY()];
+			btn.setText(e.getIcon());
 		});
 	
+	}
+	
+	public void updatePossibleMoves(List<Position> possibleMoves) {
+		
+		possibleMoves.stream().forEach(p -> {
+			buttons[p.getX()][p.getY()].getStyleClass().add("valid-move");
+		});
+		
 	}
 	
 	private void init() {
@@ -43,11 +59,11 @@ public class MainView {
         		Button btn = new Button("");
         		btn.setPrefSize(50, 50); 
         		btn.getStyleClass().add("board-button");
-        		btn.setDisable(true);
         		
         		// Disable if it's a border square
         		if (i == 0 || j == 0 || i == (size - 1) || j == (size - 1)) {
             		btn.getStyleClass().add("border");
+            		btn.setDisable(true);
         		}
         		
         		// Add to the grid, and array
