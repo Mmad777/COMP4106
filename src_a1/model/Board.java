@@ -27,20 +27,17 @@ public class Board {
 		// Initialize the list of entities 
 		boardEntities = new ArrayList<BoardEntity>();
 		
-		Random rand = new Random();
 		
 		// Place the knight anywhere
-		boardEntities.add(new Knight(rand.nextInt(SIZE - 1), rand.nextInt(SIZE - 1)));
+		boardEntities.add(new Knight(randomInt(1, SIZE - 1), randomInt(1, SIZE - 1)));
 		
 		// TODO - Randomly generate number of pawns?
 		IntStream.range(0, NUM_PAWNS).forEach(i -> {
 			
-			// Subtract 2 from upper bounds to account for array index and border, and
-			// 	add 1 to lower bounds to account for array index
-			int rowUpperBound = SIZE - 2;
-			int colUpperBound = SIZE - 2;
-			int rowLowerBound = 1;
-			int colLowerBound = 1;			
+			int xMax = SIZE - 2;		// -1 for array index and border
+			int yMax = SIZE - 2;
+			int xMin = 1;				// 1 for array index
+			int yMin = 1;			
 			
 			// Generate a random MoveDirection
 			MoveDirection moveDirection = MoveDirection.getRandom();
@@ -48,28 +45,31 @@ public class Board {
 			// Set bounds so the pawns do not enter the border
 			switch (moveDirection) {
 				case UP:
-					rowLowerBound++;
+					yMin++;
 					break;
 				case RIGHT:
-					colUpperBound--;
+					xMax--;
 					break;
 				case LEFT:
-					colLowerBound++;
+					xMin++;
 					break;
 				case DOWN:
-					rowUpperBound--;
+					yMax--;
 					break;
 			}
-			
-			int x = rand.nextInt(rowUpperBound) + rowLowerBound;
-			int y = rand.nextInt(colUpperBound) + colLowerBound;
-			System.out.println("Generating pawn at :  x = " + x + ", y = " + y + " with direction = " + moveDirection);
-			
-			// Place the pawn
-			boardEntities.add(new Pawn(x, y));
+
+			// Generate semi-random co-ordinates and add to the list of entities
+			int x = randomInt(xMin, xMax);
+			int y = randomInt(yMin, yMax);
+			boardEntities.add(new Pawn(x, y, moveDirection));
 			
 		});
 		
+	}
+	
+	private int randomInt(int min, int max) {
+		Random rand = new Random();
+		return rand.nextInt((max + 1) - min) + min;		
 	}
 
 }

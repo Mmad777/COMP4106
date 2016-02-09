@@ -1,5 +1,6 @@
 .board-button {
-    -fx-font: 20px "Serif";
+    -fx-font: 14px "Serif";
+    -fx-font-weight: bold;    
 }
 
 .board-button {

@@ -17,13 +17,14 @@ public class Pawn extends BoardEntity {
 	private int initialX;
 	private int initialY;
 
-	public Pawn(int x, int y) {
+	public Pawn(int x, int y, MoveDirection moveDirection) {
 		super(x, y);
+		this.moveDirection = moveDirection;
 	}
 
 	@Override
 	public String getIcon() {
-		return "P";
+		return "P" + "[" + moveDirection.toString().charAt(0) + "]";
 	}
 
 	/**
