@@ -1,18 +1,18 @@
 package search;
 
-import model.BoardState;
+import model.State;
 
 public class Node {
 	
 	private Node parent;
-	private BoardState state;
+	private State state;
 	
-	public Node(Node parent, BoardState state) {
+	public Node(Node parent, State state) {
 		this.parent = parent;
 		this.state = state;
 	}
 
-	public BoardState getState() {
+	public State getState() {
 		return state;
 	}
 

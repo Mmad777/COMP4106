@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import model.BoardEntity.Position;
-import model.BoardState;
+import model.State;
 
 public class MainView {
 	
@@ -29,12 +29,17 @@ public class MainView {
 		return buttons;
 	}
 	
-	public void update(BoardState board) {
+	public void update(State board) {
 		
-		board.getBoardEntities().stream().forEach(e -> {
+		// Display all pawns
+		board.getPawns().stream().forEach(e -> {
 			Button btn = buttons[e.getPosition().getX()][e.getPosition().getY()];
 			btn.setText(e.getIcon());
 		});
+		
+		// Display the knight
+		Button btn = buttons[board.getKnight().getPosition().getX()][board.getKnight().getPosition().getY()];
+		btn.setText(board.getKnight().getIcon());
 	
 	}
 	

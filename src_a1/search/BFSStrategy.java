@@ -4,13 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import model.BoardState;
-import model.Knight;
+import model.State;
 
 public class BFSStrategy implements SearchStrategy {
 
 	@Override
-	public List<BoardState> findPath(BoardState initialBoardState) {
+	public List<State> findPath(State initialBoardState) {
 		
 		Queue<Node> nodeList = new LinkedList<Node>();
 		
@@ -44,8 +43,8 @@ public class BFSStrategy implements SearchStrategy {
 	}
 
 	@Override
-	public boolean isGoalState(BoardState state) {
-		return state.getBoardEntities().size() == 1 && state.getBoardEntities().get(0) instanceof Knight;
+	public boolean isGoalState(State state) {
+		return state.isFinished();
 	}
 
 }

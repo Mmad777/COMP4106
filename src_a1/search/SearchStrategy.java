@@ -2,11 +2,11 @@ package search;
 
 import java.util.List;
 
-import model.BoardState;
+import model.State;
 
 public interface SearchStrategy {
 	
-	public List<BoardState> findPath(BoardState initialBoardState);
-	public boolean isGoalState(BoardState state);
+	public List<State> findPath(State initialBoardState);
+	public boolean isGoalState(State state);
 
 }

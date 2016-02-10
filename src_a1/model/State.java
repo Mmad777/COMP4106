@@ -7,33 +7,58 @@ import java.util.stream.IntStream;
 
 import model.Pawn.MoveDirection;
 
-public class BoardState {
+public class State {
 	
 	public final static int SIZE = 15;
 	private final int NUM_PAWNS = 5;
 	
-	private List<BoardEntity> boardEntities;
+	private Knight knight;
+	private List<Pawn> pawns;
 	
-	public BoardState() {
-		generateBoard();
+	public State(boolean initialize) {
+		
+		pawns = new ArrayList<Pawn>();
+		
+		if (initialize) {
+			initBoard();
+		}
+		
 	}
 	
-	public BoardEntity getBoardEntity(int x, int y) {
-		return boardEntities.stream().filter(e -> e.getPosition().getX() == x && e.getPosition().getY() == y).findFirst().get();
+	public boolean isFinished() {
+		return pawns.isEmpty();
 	}
 	
-	public List<BoardEntity> getBoardEntities() {
-		return boardEntities;
+	public Knight getKnight() {
+		return knight;
+	}
+
+	public void setKnight(Knight knight) {
+		this.knight = knight;
+	}
+
+	public List<Pawn> getPawns() {
+		return pawns;
+	}
+
+	public void setPawns(List<Pawn> pawns) {
+		this.pawns = pawns;
+	}
+
+	private void initBoard() {
+		
+		initKnight();
+		initPawns();
+		
 	}
 	
-	private void generateBoard() {
+	private void initKnight() {
+
+		knight = new Knight(randomInt(1, SIZE - 1), randomInt(1, SIZE - 1));
 		
-		// Initialize the list of entities 
-		boardEntities = new ArrayList<BoardEntity>();
-		
-		
-		// Place the knight anywhere
-		boardEntities.add(new Knight(randomInt(1, SIZE - 1), randomInt(1, SIZE - 1)));
+	}
+	
+	private void initPawns() {
 		
 		// TODO - Randomly generate number of pawns?
 		IntStream.range(0, NUM_PAWNS).forEach(i -> {
@@ -65,7 +90,7 @@ public class BoardState {
 			// Generate semi-random co-ordinates and add to the list of entities
 			int x = randomInt(xMin, xMax);
 			int y = randomInt(yMin, yMax);
-			boardEntities.add(new Pawn(x, y, moveDirection));
+			pawns.add(new Pawn(x, y, moveDirection));
 			
 		});
 		
