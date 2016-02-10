@@ -16,19 +16,13 @@ public class Pawn extends Entity {
 	private MoveDirection moveDirection;
 	private int initialX;
 	private int initialY;
-
-	public Pawn(int x, int y, MoveDirection moveDirection) {
-		super(x, y);
-		this.initialX = x;
-		this.initialY = y;
-		this.moveDirection = moveDirection;
-	}
 	
 	public Pawn(int initialX, int initialY, int x, int y, MoveDirection moveDirection) {
 		super(x, y);
 		this.initialX  = initialX;
 		this.initialY = initialY;
 		this.moveDirection = moveDirection;
+		//System.out.println("Initializing pawn [" + x + ", " + y + "] - initial [" + initialX + ", " + initialY + "]");
 	}
 
 	public Pawn(Pawn p) {
@@ -50,17 +44,21 @@ public class Pawn extends Entity {
 		int newY = position.y;
 		switch (moveDirection) {
 			case LEFT:
-				newX = initialPosition() ? newX - 1 : initialX;
+				newX = initialPosition() ? initialX - 1 : initialX;
 				break;
 			case RIGHT:
-				newX = initialPosition() ? newX + 1 : initialX;
+				newX = initialPosition() ? initialX + 1 : initialX;
 				break;
 			case UP:
-				newY = initialPosition() ? newY - 1 : initialY;
+				newY = initialPosition() ? initialY - 1 : initialY;
 				break;
 			case DOWN:
-				newY = initialPosition() ? newY + 1 : initialY;
+				newY = initialPosition() ? initialY + 1 : initialY;
 				break;
+		}
+		
+		if (newX == position.x || newY == position.y) {
+			System.out.println("ERROR");
 		}
 		
 		return new Position(newX, newY);

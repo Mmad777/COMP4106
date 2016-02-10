@@ -18,7 +18,7 @@ public class Controller {
 		view.draw(initialState);
 		
 		BFSStrategy strategy = new BFSStrategy();
-		strategy.findPath(initialState);
+		strategy.findPath(initialState, view);
 		
 	}
 

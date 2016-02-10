@@ -158,7 +158,7 @@ public class State {
 			// Generate semi-random co-ordinates and add to the list of entities
 			int x = randomInt(xMin, xMax);
 			int y = randomInt(yMin, yMax);
-			pawns.add(new Pawn(x, y, moveDirection));
+			pawns.add(new Pawn(x, y, x, y, moveDirection));
 			
 		});
 		

@@ -4,19 +4,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import application.View;
 import model.State;
 
 public class BFSStrategy implements SearchStrategy {
 
 	@Override
-	public List<State> findPath(State initialBoardState) {
+	public List<State> findPath(State initialBoardState, View view) {
 		
 		Queue<Node> nodeList = new LinkedList<Node>();
 		
 		// Create and add a node for the initial board state
 		nodeList.add(new Node(null, initialBoardState));
 		
-		while (true) {
+		int iter = 0;
+		while (iter < 3) {
 			
 			// Check if there are no more elements
 			if (nodeList.isEmpty()) {
@@ -26,6 +28,17 @@ public class BFSStrategy implements SearchStrategy {
 			
 			// Get the first element in the queue
 			Node e = nodeList.poll();
+
+			System.out.println("\niteration = " + iter++);
+			System.out.println("knight pos = " + e.getState().getKnight().getPosition());
+			
+			// Display it, and wait 3 second
+			view.draw(e.getState());
+			try {
+				Thread.sleep(30);
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+			}
 			
 			// Check if we've reached the goal state
 			if (isGoalState(e.getState())) {
