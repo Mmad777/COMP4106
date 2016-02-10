@@ -3,11 +3,11 @@ package application;
 import model.Position;
 import model.State;
 
-public class MainView {
+public class View {
 	
 	private int size;
 	
-	public MainView(int size) {
+	public View(int size) {
 		this.size = size;
 	}
 	

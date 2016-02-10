@@ -23,10 +23,25 @@ public class Pawn extends Entity {
 		this.initialY = y;
 		this.moveDirection = moveDirection;
 	}
+	
+	public Pawn(int initialX, int initialY, int x, int y, MoveDirection moveDirection) {
+		super(x, y);
+		this.initialX  = initialX;
+		this.initialY = initialY;
+		this.moveDirection = moveDirection;
+	}
+
+	public Pawn(Pawn p) {
+		this(p.getInitialX(), p.getInitialY(), p.getPosition().getX(), p.getPosition().getY(), p.getMoveDirection());
+	}
 
 	@Override
 	public String getIcon() {
 		return "P";
+	}
+	
+	public void updatePosition() {
+		this.position = getNextPosition();
 	}
 
 	public Position getNextPosition() {

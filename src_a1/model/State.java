@@ -20,6 +20,10 @@ public class State {
 	private Knight knight;
 	private List<Pawn> pawns;
 	
+	public State() {
+		this(false);
+	}
+	
 	public State(boolean initialize) {
 		
 		pawns = new ArrayList<Pawn>();
@@ -28,6 +32,69 @@ public class State {
 			initBoard();
 		}
 		
+	}
+	
+	public List<State> generate() {
+		
+		List<State> states = new ArrayList<State>();
+		
+		// Produce all possible moves for the Knight, and iterate through them (ignoring invalid positions)
+		List<Position> kPositions = knight.getNextPositions();
+		kPositions.stream().filter(kPos -> isValidPos(kPos)).forEach(kPos -> {
+			
+			// 1. Create the new state
+			State state = new State();
+			
+			// 2. Add the new knight
+			state.setKnight(new Knight(kPos));
+			
+			// 3. Find all pawns that were not captured
+			List<Pawn> nonCapturedPawns1 = filterCapturedPawns(state.getKnight(), pawns);
+					
+			// 4. For all non-captured pawns, update their positions
+			nonCapturedPawns1.stream().forEach(p -> {
+				p.updatePosition();
+			});
+			
+			// 5. Again, find all pawns that were not captured
+			List<Pawn> nonCapturedPawns2 = filterCapturedPawns(state.getKnight(), nonCapturedPawns1);
+			
+			// 6. Set the state's pawns
+			state.setPawns(nonCapturedPawns2);
+			
+			// Sanity check
+			state.getPawns().forEach(p -> {
+				
+				Position pPos = p.getPosition();
+				if (!isValidPos(pPos)) {
+					System.out.println("ERROR! INVALID PAWN POSITION = " + pPos.getX() + ", " + pPos.getY());
+				}
+				
+			});
+			
+			// 7. Add the state 
+			states.add(state);
+			
+		});
+		
+		return states;
+		
+	}
+
+	private List<Pawn> filterCapturedPawns(Knight knight, List<Pawn> pawns) {
+		
+		List<Pawn> result = new ArrayList<Pawn>();
+		pawns.stream().forEach(p -> {
+			if (!knight.getPosition().equals(p.getPosition())) {
+				result.add(new Pawn(p));
+			}
+		});		
+		return result;
+		
+	}
+	
+	private boolean isValidPos(Position pos) {
+		return pos.getX() > 1 && pos.getY() > 1 && pos.getY() < SIZE - 2 && pos.getX() < SIZE - 2;
 	}
 	
 	public boolean isFinished() {
@@ -51,16 +118,12 @@ public class State {
 	}
 
 	private void initBoard() {
-		
 		initKnight();
 		initPawns();
-		
 	}
 	
 	private void initKnight() {
-
-		knight = new Knight(randomInt(1, SIZE - 2), randomInt(1, SIZE - 2));
-		
+		knight = new Knight(randomInt(1, SIZE - 2), randomInt(1, SIZE - 2));		
 	}
 	
 	private void initPawns() {

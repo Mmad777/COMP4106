@@ -9,6 +9,10 @@ public class Knight extends Entity {
 		super(x, y);
 	}
 
+	public Knight(Position pos) {
+		super(pos);
+	}
+
 	@Override
 	public String getIcon() {
 		return "K";

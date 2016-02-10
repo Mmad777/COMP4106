@@ -18,23 +18,28 @@ public class BFSStrategy implements SearchStrategy {
 		
 		while (true) {
 			
-			// No more elements
+			// Check if there are no more elements
 			if (nodeList.isEmpty()) {
 				System.out.println("QUIT - nodeList is empty.");
 				break;
 			}
 			
+			// Get the first element in the queue
 			Node e = nodeList.poll();
 			
-			// Reached goal state
+			// Check if we've reached the goal state
 			if (isGoalState(e.getState())) {
 				System.out.println("QUIT - reached goal state.");
 				break;
 			}
 			
 			// Generate new states
+			List<State> states = e.getState().generate();
 			
-			
+			// Add nodes for each state
+			states.forEach(s -> {
+				nodeList.add(new Node(e, s));
+			});
 			
 		}
 		
