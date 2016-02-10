@@ -25,7 +25,6 @@ public class DFSStrategy extends SearchStrategy {
 	private Node dfs(State initState) {
 
 		Set<String> visitedNodes = new HashSet<String>();
-
 		Stack<Node> fringe = new Stack<Node>();
 		fringe.add(new Node(null, initState));
 
@@ -33,7 +32,7 @@ public class DFSStrategy extends SearchStrategy {
 
 			Node currNode = fringe.pop();
 			visitedNodes.add(currNode.getState().getId());
-
+			
 			if (isGoalState(currNode.getState())) {
 				return currNode;
 			}

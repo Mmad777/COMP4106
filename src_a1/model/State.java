@@ -1,8 +1,10 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
@@ -14,7 +16,7 @@ public class State {
 	
     Logger logger = LoggerFactory.getLogger(State.class);
 	
-	public final static int SIZE = 15;
+	public final static int BOARD_SIZE = 20;
 	private final int NUM_PAWNS = 5;
 	
 	private Knight knight;
@@ -59,8 +61,13 @@ public class State {
 			// 5. Again, find all pawns that were not captured
 			List<Pawn> nonCapturedPawns2 = filterCapturedPawns(state.getKnight(), nonCapturedPawns1);
 			
+			// Sort the pawns (x, y)
+			Comparator<Pawn> comparator = Comparator.comparing(pawn -> pawn.getPosition().getX());
+		    comparator = comparator.thenComparing(Comparator.comparing(pawn -> pawn.getPosition().getY()));
+		    List<Pawn> sortedPawns = nonCapturedPawns2.stream().sorted(comparator).collect(Collectors.toList());
+			
 			// 6. Set the state's pawns
-			state.setPawns(nonCapturedPawns2);
+			state.setPawns(sortedPawns);
 			
 			// Sanity check
 			state.getPawns().forEach(p -> {
@@ -94,7 +101,7 @@ public class State {
 	}
 	
 	private boolean isValidPos(Position pos) {
-		return pos.getX() > 0 && pos.getY() > 0 && pos.getX() < (SIZE - 1) && pos.getY() < (SIZE - 1);
+		return pos.getX() > 0 && pos.getY() > 0 && pos.getX() < (BOARD_SIZE - 1) && pos.getY() < (BOARD_SIZE - 1);
 	}
 	
 	public boolean allPawnsCaptured() {
@@ -132,7 +139,7 @@ public class State {
 	}
 	
 	private void initKnight() {
-		knight = new Knight(randomInt(1, SIZE - 2), randomInt(1, SIZE - 2));		
+		knight = new Knight(randomInt(1, BOARD_SIZE - 2), randomInt(1, BOARD_SIZE - 2));		
 	}
 	
 	private void initPawns() {
@@ -140,8 +147,8 @@ public class State {
 		// TODO - Randomly generate number of pawns?
 		IntStream.range(0, NUM_PAWNS).forEach(i -> {
 			
-			int xMax = SIZE - 2;		// -1 for array index and border
-			int yMax = SIZE - 2;
+			int xMax = BOARD_SIZE - 2;		// -1 for array index and border
+			int yMax = BOARD_SIZE - 2;
 			int xMin = 1;				// 1 for array index
 			int yMin = 1;			
 			

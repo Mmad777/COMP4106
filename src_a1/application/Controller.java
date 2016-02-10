@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import model.State;
+import search.BFSStrategy;
 import search.DFSStrategy;
 
 public class Controller {
@@ -18,15 +19,15 @@ public class Controller {
 	public Controller() {
         
 		// Initialize the view
-		view = new View(State.SIZE);
+		view = new View(State.BOARD_SIZE);
         
         // Initialize the board and draw the initial view
 		initialState = new State(true);
 		view.draw(initialState);
 		
 		// Pick a search strategy
-		//BFSStrategy strategy = new BFSStrategy();
-		DFSStrategy strategy = new DFSStrategy();
+		BFSStrategy strategy = new BFSStrategy();
+		//DFSStrategy strategy = new DFSStrategy();
 		
 		// Run the search
 		List<State> path = strategy.search(initialState);		

@@ -1,13 +1,14 @@
 package search;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import application.View;
 import model.State;
 
 public class BFSStrategy extends SearchStrategy {
@@ -16,32 +17,41 @@ public class BFSStrategy extends SearchStrategy {
 
 	@Override
 	public List<State> search(State initState) {
+
+		Node goalNode = bfs(initState);
+		return goalNode != null ? generateGoalPath(goalNode) : null;
 		
-		Queue<Node> nodeList = new LinkedList<Node>();
-		
-		// Create and add a node for the initial board state
-		nodeList.add(new Node(null, initState));
+	}
+	
+	private Node bfs(State initState) {
+
+		Set<String> visitedNodes = new HashSet<String>();
+		Queue<Node> fringe = new LinkedList<Node>();
+		fringe.add(new Node(null, initState));
 		
 		int iter = 0;
-		while (!nodeList.isEmpty()) {
+		while (!fringe.isEmpty()) {
+			iter++;
 			
-			Node e = nodeList.poll();
+			Node currNode = fringe.remove();
+			visitedNodes.add(currNode.getState().getId());
+			
+			logger.trace("Iteration #{} {}", iter, currNode.toString());
+			if (iter % 50000 == 0) logger.info("Iteration #{} - Fringe Size = {} - Visited Size = {}", iter, fringe.size(), visitedNodes.size());
+			
+			if (isGoalState(currNode.getState())) {
+				logger.info("Solved on iteration #{}", iter);
+				return currNode;
+			}
 
-			logger.trace("Iteration = " + (iter++));
-			logger.trace(e.toString());
-			
-			if (isGoalState(e.getState())) {
-				logger.info("QUIT - reached goal state.");
-				break;
-			}
-			
-			// Generate new states
-			List<State> states = e.getState().generateSuccessors();
-			
-			// Add nodes for each state
-			for (State s : states) {
-				nodeList.add(new Node(e, s));
-			}
+			// Add nodes for all children states not yet visited			
+			currNode.getState().generateSuccessors().stream()
+				.filter(s -> {
+					return !visitedNodes.contains(s.getId());
+				})
+				.forEach(s -> {
+					fringe.add(new Node(currNode, s));
+				});
 			
 		}
 		
@@ -49,9 +59,7 @@ public class BFSStrategy extends SearchStrategy {
 		
 	}
 	
-	private Node bfs(State initState) {
-		
-		return null;
+	private void log(Node currNode) {
 		
 	}
 
