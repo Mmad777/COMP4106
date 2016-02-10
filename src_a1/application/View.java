@@ -31,7 +31,7 @@ public class View {
 				
 				String s = stateDisplay[i][j] == null ? "_" : stateDisplay[i][j];
 				if (i == 0 || i == size - 1 || j == 0 || j == size - 1) s = "X";
-				System.out.print(s + " ");
+				System.out.print(s);
 				
 				System.out.print("]");
 				

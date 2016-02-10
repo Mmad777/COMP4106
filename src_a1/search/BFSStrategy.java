@@ -12,13 +12,14 @@ public class BFSStrategy implements SearchStrategy {
 	@Override
 	public List<State> findPath(State initialBoardState, View view) {
 		
+		int minPawns = 5;
 		Queue<Node> nodeList = new LinkedList<Node>();
 		
 		// Create and add a node for the initial board state
 		nodeList.add(new Node(null, initialBoardState));
 		
 		int iter = 0;
-		while (iter < 3) {
+		while (true) {
 			
 			// Check if there are no more elements
 			if (nodeList.isEmpty()) {
@@ -29,16 +30,21 @@ public class BFSStrategy implements SearchStrategy {
 			// Get the first element in the queue
 			Node e = nodeList.poll();
 
-			System.out.println("\niteration = " + iter++);
+			System.out.println("\niteration = " + iter);
 			System.out.println("knight pos = " + e.getState().getKnight().getPosition());
+			System.out.println(e);
 			
-			// Display it, and wait 3 second
-			view.draw(e.getState());
-			try {
-				Thread.sleep(30);
-			} catch (InterruptedException ex) {
-				ex.printStackTrace();
+			if (e.getState().getPawns().size() < minPawns) {
+				minPawns = e.getState().getPawns().size();
 			}
+			
+			// Display it
+			view.draw(e.getState());
+//			try {
+//				Thread.sleep(30);
+//			} catch (InterruptedException ex) {
+//				ex.printStackTrace();
+//			}
 			
 			// Check if we've reached the goal state
 			if (isGoalState(e.getState())) {
@@ -50,9 +56,9 @@ public class BFSStrategy implements SearchStrategy {
 			List<State> states = e.getState().generate();
 			
 			// Add nodes for each state
-			states.forEach(s -> {
+			for (State s : states) {
 				nodeList.add(new Node(e, s));
-			});
+			}
 			
 		}
 		
