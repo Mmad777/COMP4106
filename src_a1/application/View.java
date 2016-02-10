@@ -7,7 +7,8 @@ import model.State;
 
 public class View {
 	
-	private final int DELAY = 500;
+	private final boolean USE_DELAY = false;
+	private final int DELAY = 10;
 	
 	private int size;
 	
@@ -21,10 +22,14 @@ public class View {
 			
 			draw(s);
 
-			try {
-				Thread.sleep(DELAY);
-			} catch (InterruptedException ex) {
-				ex.printStackTrace();
+			if (USE_DELAY) {
+				
+				try {
+					Thread.sleep(DELAY);
+				} catch (InterruptedException ex) {
+					ex.printStackTrace();
+				}
+			
 			}
 			
 		});

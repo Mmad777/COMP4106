@@ -34,7 +34,7 @@ public class State {
 		
 	}
 	
-	public List<State> generate() {
+	public List<State> generateSuccessors() {
 		
 		List<State> states = new ArrayList<State>();
 		

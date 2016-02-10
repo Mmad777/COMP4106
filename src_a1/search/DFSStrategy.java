@@ -1,8 +1,10 @@
 package search;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.Stack;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,79 +13,65 @@ import application.View;
 import model.State;
 
 public class DFSStrategy implements SearchStrategy {
-	
-    Logger logger = LoggerFactory.getLogger(DFSStrategy.class);
-    
-    private HashMap<String, Node> visitedNodes;
-    private Node goalNode;
 
+	Logger logger = LoggerFactory.getLogger(DFSStrategy.class);
+	
 	@Override
 	public List<State> search(State initState, View view) {
-		
-		visitedNodes = new HashMap<String, Node>();
-		Node initialNode = new Node(null, initState);
-		
-		dfs(initialNode);
-		logger.info("Done!");
-		
+
+		// Run the DFS algorithm
+		Node goalNode = dfs(initState);
+
+		// If a goal state has been reached...
 		if (goalNode != null) {
 
 			List<State> path = new ArrayList<State>();
-			
+
+			// Generate the list of states along the goal path, in correct order
 			Node currNode = goalNode;
 			while (currNode != null) {
 				path.add(0, currNode.getState());
 				currNode = currNode.getParent();
 			}
-			
+
 			view.drawStatesWithDelay(path);
-			
+
+		}
+
+		return null;
+
+	}
+
+	private Node dfs(State initState) {
+
+		// Store visited node IDs
+		Set<String> visitedNodes = new HashSet<String>();
+
+		Stack<Node> fringe = new Stack<Node>();
+		fringe.add(new Node(null, initState));
+
+		while (!fringe.isEmpty()) {
+
+			Node currNode = fringe.pop();
+			visitedNodes.add(currNode.getState().getId());
+
+			if (isGoalState(currNode.getState())) {
+				return currNode;
+			}
+
+			// Add nodes for all children states not yet visited
+			currNode.getState().generateSuccessors().stream()
+				.filter(s -> {
+					return !visitedNodes.contains(s.getId());
+				})
+				.forEach(s -> {
+					fringe.push(new Node(currNode, s));
+				});
+
 		}
 		
 		return null;
-		
-	}
-	
-	private boolean dfs(Node node) {
-		
-		if (node == null) {
-			logger.warn("node == null");
-			return false;
-		}
-		
-		State state = node.getState();
-		String id = state.getId();
-		
-		// Check if the node was already visited
-		if (visitedNodes.containsKey(id)) {
-			logger.info("Already visited state: " + id);
-			return false;
-		}
-		
-		// Add node to visited
-		visitedNodes.put(id, node);
-		
-		// Check if node is goal state
-		if (isGoalState(state)) {
-			logger.info("Found goal state: " + id);
-			goalNode = node;
-			return true;
-		}
-		
-		// Generate successors
-		List<State> childStates = node.getState().generate();
-		if (childStates.size() == 0) {
-			logger.info("No more child states");
-			return false;
-		}
-		
-		for (State childState : childStates) {
-			boolean result = dfs(new Node(node, childState));
-			if (result == true) return true;
-		}
-		
-		return false;
-		
+
 	}
 
 	@Override

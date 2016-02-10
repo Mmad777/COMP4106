@@ -29,6 +29,7 @@ public class BFSStrategy implements SearchStrategy {
 		while (true) {
 			
 			iter++;
+			
 			// Check if there are no more elements
 			if (nodeList.isEmpty()) {
 				logger.info("QUIT - nodeList is empty.");
@@ -61,7 +62,7 @@ public class BFSStrategy implements SearchStrategy {
 			}
 			
 			// Generate new states
-			List<State> states = e.getState().generate();
+			List<State> states = e.getState().generateSuccessors();
 			
 			// Add nodes for each state
 			for (State s : states) {
