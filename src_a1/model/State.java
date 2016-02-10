@@ -5,9 +5,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import model.Pawn.MoveDirection;
 
 public class State {
+	
+    Logger logger = LoggerFactory.getLogger(State.class);
 	
 	public final static int SIZE = 15;
 	private final int NUM_PAWNS = 5;
