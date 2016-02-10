@@ -5,7 +5,7 @@ import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-import model.BoardEntity.Position;
+import model.Position;
 import model.State;
 
 public class MainView {

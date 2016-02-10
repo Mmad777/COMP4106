@@ -1,9 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Pawn extends BoardEntity {
+public class Pawn extends Entity {
 
 	public enum MoveDirection {
 		LEFT,
@@ -32,6 +29,29 @@ public class Pawn extends BoardEntity {
 		return "P" + "[" + moveDirection.toString().charAt(0) + "]";
 	}
 
+	public Position getNextPosition() {
+
+		int newX = position.x;
+		int newY = position.y;
+		switch (moveDirection) {
+			case LEFT:
+				newX = initialPosition() ? newX - 1 : initialX;
+				break;
+			case RIGHT:
+				newX = initialPosition() ? newX + 1 : initialX;
+				break;
+			case UP:
+				newY = initialPosition() ? newY - 1 : initialY;
+				break;
+			case DOWN:
+				newY = initialPosition() ? newY + 1 : initialY;
+				break;
+		}
+		
+		return new Position(newX, newY);
+		
+	}
+
 	public MoveDirection getMoveDirection() {
 		return moveDirection;
 	}
@@ -55,19 +75,9 @@ public class Pawn extends BoardEntity {
 	public void setInitialY(int initialY) {
 		this.initialY = initialY;
 	}
-
-	@Override
-	public List<Position> getPossibleMoves() {
-
-		List<Position> moves = new ArrayList<Position>();
-		switch (moveDirection) {
-			case LEFT:
-				break;
-		
-		}
-		
-		return moves;
-		
+	
+	private boolean initialPosition() {
+		return initialX == position.x && initialY == position.y;
 	}
 
 }

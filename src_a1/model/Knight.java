@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Knight extends BoardEntity {
+public class Knight extends Entity {
 
 	public Knight(int x, int y) {
 		super(x, y);
@@ -14,31 +14,30 @@ public class Knight extends BoardEntity {
 		return "K";
 	}
 
-	@Override
-	public List<Position> getPossibleMoves() {
+	public List<Position> getNextPositions() {
 		
-		List<Position> possibleMoves = new ArrayList<Position>();
+		List<Position> moves = new ArrayList<Position>();
 		
 		int x = getPosition().getX();
 		int y = getPosition().getY();
 		
 		// top left
-		possibleMoves.add(new Position(x - 1, y - 2));
-		possibleMoves.add(new Position(x - 2, y - 1));
+		moves.add(new Position(x - 1, y - 2));
+		moves.add(new Position(x - 2, y - 1));
 		
 		// top right
-		possibleMoves.add(new Position(x + 1, y - 2));
-		possibleMoves.add(new Position(x + 2, y - 1));
+		moves.add(new Position(x + 1, y - 2));
+		moves.add(new Position(x + 2, y - 1));
 		
 		// bottom right
-		possibleMoves.add(new Position(x + 1, y + 2));
-		possibleMoves.add(new Position(x + 2, y + 1));
+		moves.add(new Position(x + 1, y + 2));
+		moves.add(new Position(x + 2, y + 1));
 		
 		// bottom left
-		possibleMoves.add(new Position(x - 1, y + 2));
-		possibleMoves.add(new Position(x - 2, y + 1));
+		moves.add(new Position(x - 1, y + 2));
+		moves.add(new Position(x - 2, y + 1));
 		
-		return possibleMoves;		
+		return moves;		
 		
 	}
 
