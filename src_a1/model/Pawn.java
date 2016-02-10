@@ -35,33 +35,29 @@ public class Pawn extends Entity {
 	}
 	
 	public void updatePosition() {
-		this.position = getNextPosition();
-	}
-
-	public Position getNextPosition() {
-
-		int newX = position.x;
-		int newY = position.y;
+		
+		Position oldPos = new Position(this.position);
+		//System.out.println("Current pos = " + this.position);
 		switch (moveDirection) {
 			case LEFT:
-				newX = initialPosition() ? initialX - 1 : initialX;
+				this.position.setX(initialPosition() ? initialX - 1 : initialX);
 				break;
 			case RIGHT:
-				newX = initialPosition() ? initialX + 1 : initialX;
+				this.position.setX(initialPosition() ? initialX + 1 : initialX);
 				break;
 			case UP:
-				newY = initialPosition() ? initialY - 1 : initialY;
+				this.position.setY(initialPosition() ? initialY - 1 : initialY);
 				break;
 			case DOWN:
-				newY = initialPosition() ? initialY + 1 : initialY;
+				this.position.setY(initialPosition() ? initialY + 1 : initialY);
 				break;
-		}
+		}		
 		
-		if (newX == position.x || newY == position.y) {
-			System.out.println("ERROR");
+		if (oldPos.equals(this.position)) {
+			System.out.println("ERROR! POSITION DIDNT UPDATE!");
 		}
-		
-		return new Position(newX, newY);
+
+		//System.out.println("New pos = " + this.position);
 		
 	}
 
