@@ -1,13 +1,30 @@
 package search;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import application.View;
 import model.State;
 
-public interface SearchStrategy {
+public abstract class SearchStrategy {
 	
-	public List<State> search(State initState, View view);
-	public boolean isGoalState(State state);
+	public abstract List<State> search(State initState);
+	
+	protected List<State> generateGoalPath(Node goalNode) {
+
+		List<State> path = new ArrayList<State>();
+
+		Node currNode = goalNode;
+		while (currNode != null) {
+			path.add(0, currNode.getState());
+			currNode = currNode.getParent();
+		}
+		
+		return path;
+		
+	}
+
+	protected boolean isGoalState(State state) {
+		return state.allPawnsCaptured();
+	}
 
 }

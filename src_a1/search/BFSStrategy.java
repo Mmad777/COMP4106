@@ -10,15 +10,12 @@ import org.slf4j.LoggerFactory;
 import application.View;
 import model.State;
 
-public class BFSStrategy implements SearchStrategy {
+public class BFSStrategy extends SearchStrategy {
 	
     Logger logger = LoggerFactory.getLogger(BFSStrategy.class);
-	
-	private final boolean 	SLEEP = false;
-	private final int 		SLEEP_TIME = 30;
 
 	@Override
-	public List<State> search(State initState, View view) {
+	public List<State> search(State initState) {
 		
 		Queue<Node> nodeList = new LinkedList<Node>();
 		
@@ -26,36 +23,13 @@ public class BFSStrategy implements SearchStrategy {
 		nodeList.add(new Node(null, initState));
 		
 		int iter = 0;
-		while (true) {
+		while (!nodeList.isEmpty()) {
 			
-			iter++;
-			
-			// Check if there are no more elements
-			if (nodeList.isEmpty()) {
-				logger.info("QUIT - nodeList is empty.");
-				break;
-			}
-			
-			// Get the first element in the queue
 			Node e = nodeList.poll();
 
-			// Log some information
-			System.out.println("\nIteration = " + iter);
-			System.out.println(e.toString());
+			logger.trace("Iteration = " + (iter++));
+			logger.trace(e.toString());
 			
-			// Display the state
-			view.draw(e.getState());
-			
-			// Allow for a delay so that states/program flow can be viewed 
-			if (SLEEP) {
-				try {
-					Thread.sleep(SLEEP_TIME);
-				} catch (InterruptedException ex) {
-					ex.printStackTrace();
-				}
-			}
-			
-			// Check if we've reached the goal state
 			if (isGoalState(e.getState())) {
 				logger.info("QUIT - reached goal state.");
 				break;
@@ -71,14 +45,14 @@ public class BFSStrategy implements SearchStrategy {
 			
 		}
 		
-		// TODO - return states along path
 		return null;
 		
 	}
-
-	@Override
-	public boolean isGoalState(State state) {
-		return state.allPawnsCaptured();
+	
+	private Node bfs(State initState) {
+		
+		return null;
+		
 	}
 
 }

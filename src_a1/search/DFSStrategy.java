@@ -1,6 +1,5 @@
 package search;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,42 +8,22 @@ import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import application.View;
 import model.State;
 
-public class DFSStrategy implements SearchStrategy {
+public class DFSStrategy extends SearchStrategy {
 
 	Logger logger = LoggerFactory.getLogger(DFSStrategy.class);
 	
 	@Override
-	public List<State> search(State initState, View view) {
+	public List<State> search(State initState) {
 
-		// Run the DFS algorithm
 		Node goalNode = dfs(initState);
-
-		// If a goal state has been reached...
-		if (goalNode != null) {
-
-			List<State> path = new ArrayList<State>();
-
-			// Generate the list of states along the goal path, in correct order
-			Node currNode = goalNode;
-			while (currNode != null) {
-				path.add(0, currNode.getState());
-				currNode = currNode.getParent();
-			}
-
-			view.drawStatesWithDelay(path);
-
-		}
-
-		return null;
+		return goalNode != null ? generateGoalPath(goalNode) : null;
 
 	}
 
 	private Node dfs(State initState) {
 
-		// Store visited node IDs
 		Set<String> visitedNodes = new HashSet<String>();
 
 		Stack<Node> fringe = new Stack<Node>();
@@ -72,11 +51,6 @@ public class DFSStrategy implements SearchStrategy {
 		
 		return null;
 
-	}
-
-	@Override
-	public boolean isGoalState(State state) {
-		return state.allPawnsCaptured();
 	}
 
 }
