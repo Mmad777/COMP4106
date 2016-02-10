@@ -1,14 +1,34 @@
 package application;
 
+import java.util.List;
+
 import model.Position;
 import model.State;
 
 public class View {
 	
+	private final int DELAY = 500;
+	
 	private int size;
 	
 	public View(int size) {
 		this.size = size;
+	}
+	
+	public void drawStatesWithDelay(List<State> states) {
+
+		states.stream().forEach(s -> {
+			
+			draw(s);
+
+			try {
+				Thread.sleep(DELAY);
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+			}
+			
+		});
+		
 	}
 	
 	public void draw(State state) {

@@ -1,7 +1,7 @@
 package application;
 
 import model.State;
-import search.BFSStrategy;
+import search.DFSStrategy;
 
 public class Controller {
 	
@@ -17,8 +17,9 @@ public class Controller {
 		initialState = new State(true);
 		view.draw(initialState);
 		
-		BFSStrategy strategy = new BFSStrategy();
-		strategy.findPath(initialState, view);
+		//BFSStrategy strategy = new BFSStrategy();
+		DFSStrategy strategy = new DFSStrategy();
+		strategy.search(initialState, view);
 		
 	}
 

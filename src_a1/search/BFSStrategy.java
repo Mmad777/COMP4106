@@ -18,12 +18,12 @@ public class BFSStrategy implements SearchStrategy {
 	private final int 		SLEEP_TIME = 30;
 
 	@Override
-	public List<State> findPath(State initialBoardState, View view) {
+	public List<State> search(State initState, View view) {
 		
 		Queue<Node> nodeList = new LinkedList<Node>();
 		
 		// Create and add a node for the initial board state
-		nodeList.add(new Node(null, initialBoardState));
+		nodeList.add(new Node(null, initState));
 		
 		int iter = 0;
 		while (true) {
@@ -70,13 +70,14 @@ public class BFSStrategy implements SearchStrategy {
 			
 		}
 		
+		// TODO - return states along path
 		return null;
 		
 	}
 
 	@Override
 	public boolean isGoalState(State state) {
-		return state.isFinished();
+		return state.allPawnsCaptured();
 	}
 
 }

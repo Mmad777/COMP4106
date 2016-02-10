@@ -15,6 +15,10 @@ public class Node {
 		this.state = state;
 		this.id = Node.ID++;
 	}
+	
+	public Node getParent() {
+		return parent;
+	}
 
 	public State getState() {
 		return state;

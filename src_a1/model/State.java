@@ -97,8 +97,17 @@ public class State {
 		return pos.getX() > 0 && pos.getY() > 0 && pos.getX() < (SIZE - 1) && pos.getY() < (SIZE - 1);
 	}
 	
-	public boolean isFinished() {
+	public boolean allPawnsCaptured() {
 		return pawns.isEmpty();
+	}
+	
+	public String getId() {
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(knight.getPosition());
+		pawns.forEach(p -> { sb.append(p.getPosition()); } );
+		return sb.toString();
+		
 	}
 	
 	public Knight getKnight() {
