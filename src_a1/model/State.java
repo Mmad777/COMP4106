@@ -67,7 +67,7 @@ public class State {
 				
 				Position pPos = p.getPosition();
 				if (!isValidPos(pPos)) {
-					System.out.println("ERROR! INVALID PAWN POSITION = " + pPos.getX() + ", " + pPos.getY());
+					logger.error("ERROR! INVALID PAWN POSITION = " + pPos.getX() + ", " + pPos.getY());
 				}
 				
 			});

@@ -4,15 +4,22 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import application.View;
 import model.State;
 
 public class BFSStrategy implements SearchStrategy {
+	
+    Logger logger = LoggerFactory.getLogger(BFSStrategy.class);
+	
+	private final boolean 	SLEEP = false;
+	private final int 		SLEEP_TIME = 30;
 
 	@Override
 	public List<State> findPath(State initialBoardState, View view) {
 		
-		int minPawns = 5;
 		Queue<Node> nodeList = new LinkedList<Node>();
 		
 		// Create and add a node for the initial board state
@@ -21,34 +28,35 @@ public class BFSStrategy implements SearchStrategy {
 		int iter = 0;
 		while (true) {
 			
+			iter++;
 			// Check if there are no more elements
 			if (nodeList.isEmpty()) {
-				System.out.println("QUIT - nodeList is empty.");
+				logger.info("QUIT - nodeList is empty.");
 				break;
 			}
 			
 			// Get the first element in the queue
 			Node e = nodeList.poll();
 
-			System.out.println("\niteration = " + iter);
-			System.out.println("knight pos = " + e.getState().getKnight().getPosition());
-			System.out.println(e);
+			// Log some information
+			System.out.println("\nIteration = " + iter);
+			System.out.println(e.toString());
 			
-			if (e.getState().getPawns().size() < minPawns) {
-				minPawns = e.getState().getPawns().size();
-			}
-			
-			// Display it
+			// Display the state
 			view.draw(e.getState());
-//			try {
-//				Thread.sleep(30);
-//			} catch (InterruptedException ex) {
-//				ex.printStackTrace();
-//			}
+			
+			// Allow for a delay so that states/program flow can be viewed 
+			if (SLEEP) {
+				try {
+					Thread.sleep(SLEEP_TIME);
+				} catch (InterruptedException ex) {
+					ex.printStackTrace();
+				}
+			}
 			
 			// Check if we've reached the goal state
 			if (isGoalState(e.getState())) {
-				System.out.println("QUIT - reached goal state.");
+				logger.info("QUIT - reached goal state.");
 				break;
 			}
 			

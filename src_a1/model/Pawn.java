@@ -1,6 +1,11 @@
 package model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Pawn extends Entity {
+	
+    Logger logger = LoggerFactory.getLogger(Pawn.class);
 
 	public enum MoveDirection {
 		LEFT,
@@ -22,7 +27,6 @@ public class Pawn extends Entity {
 		this.initialX  = initialX;
 		this.initialY = initialY;
 		this.moveDirection = moveDirection;
-		//System.out.println("Initializing pawn [" + x + ", " + y + "] - initial [" + initialX + ", " + initialY + "]");
 	}
 
 	public Pawn(Pawn p) {
@@ -37,7 +41,6 @@ public class Pawn extends Entity {
 	public void updatePosition() {
 		
 		Position oldPos = new Position(this.position);
-		//System.out.println("Current pos = " + this.position);
 		switch (moveDirection) {
 			case LEFT:
 				this.position.setX(initialPosition() ? initialX - 1 : initialX);
@@ -54,10 +57,8 @@ public class Pawn extends Entity {
 		}		
 		
 		if (oldPos.equals(this.position)) {
-			System.out.println("ERROR! POSITION DIDNT UPDATE!");
+			logger.error("ERROR! POSITION DIDNT UPDATE!");
 		}
-
-		//System.out.println("New pos = " + this.position);
 		
 	}
 
