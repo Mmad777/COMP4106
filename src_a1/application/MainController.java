@@ -1,6 +1,5 @@
 package application;
 
-import javafx.scene.Scene;
 import model.State;
 
 public class MainController {
@@ -15,12 +14,8 @@ public class MainController {
         
         // Initialize the board and update the view
 		currentBoard = new State(true);
-		view.update(currentBoard);
+		view.draw(currentBoard);
 		
-	}
-	
-	public Scene getView() {
-		return view.getScene();
 	}
 
 }

@@ -1,10 +1,5 @@
 package application;
 
-import java.util.List;
-
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
 import model.Position;
 import model.State;
 
@@ -12,76 +7,36 @@ public class MainView {
 	
 	private int size;
 	
-	private Scene scene;
-	private GridPane gridPane;
-	private Button[][] buttons;
-	
 	public MainView(int size) {
 		this.size = size;
-		init();
 	}
 	
-	public Scene getScene() {
-		return scene;
-	}
-	
-	public Button[][] getButtons() {
-		return buttons;
-	}
-	
-	public void update(State board) {
+	public void draw(State state) {
 		
-		// Display all pawns
-		board.getPawns().stream().forEach(e -> {
-			Button btn = buttons[e.getPosition().getX()][e.getPosition().getY()];
-			btn.setText(e.getIcon());
+		String[][] stateDisplay = new String[size][size];
+		
+		state.getPawns().stream().forEach(e -> {
+			int x = e.getPosition().getX();
+			int y = e.getPosition().getY();
+			stateDisplay[x][y] = e.getIcon();
 		});
 		
-		// Display the knight
-		Button btn = buttons[board.getKnight().getPosition().getX()][board.getKnight().getPosition().getY()];
-		btn.setText(board.getKnight().getIcon());
-	
-	}
-	
-	public void updatePossibleMoves(List<Position> possibleMoves) {
+		Position kPos = state.getKnight().getPosition();
+		stateDisplay[kPos.getX()][kPos.getY()] = state.getKnight().getIcon();
 		
-		possibleMoves.stream().forEach(p -> {
-			buttons[p.getX()][p.getY()].getStyleClass().add("valid-move");
-		});
-		
-	}
+		for (int i=0; i<size; i++) {
+			for (int j=0; j<size; j++) {
+				
+				String s = stateDisplay[i][j] == null ? "_" : stateDisplay[i][j];
+				if (i == 0 || i == size - 1 || j == 0 || j == size - 1) s = "X";
+				System.out.print(s + " ");
+				
+			}
+			
+			System.out.println();
+			
+		}
 	
-	private void init() {
-        
-		// Create a GridPane and 2D-array of Button
-        gridPane = new GridPane();
-        buttons = new Button[this.size][this.size];
-        
-        for(int i=0; i<buttons.length; i++){
-        	for(int j=0; j<buttons.length;j++){
-        		
-        		// Initialize button
-        		Button btn = new Button("");
-        		btn.setPrefSize(50, 50); 
-        		btn.getStyleClass().add("board-button");
-        		
-        		// Disable if it's a border square
-        		if (i == 0 || j == 0 || i == (size - 1) || j == (size - 1)) {
-            		btn.getStyleClass().add("border");
-            		btn.setDisable(true);
-        		}
-        		
-        		// Add to the grid, and array
-        		gridPane.add(btn, i, j);  
-        		buttons[i][j] = btn;
-        		
-	       	}
-        }
-                
-        //Adding GridPane to the scene
-    	scene = new Scene(gridPane);
-    	scene.getStylesheets().add("application/stylesheet.css");
-		
 	}
 
 }

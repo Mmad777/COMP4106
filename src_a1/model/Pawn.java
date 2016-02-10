@@ -26,7 +26,7 @@ public class Pawn extends Entity {
 
 	@Override
 	public String getIcon() {
-		return "P" + "[" + moveDirection.toString().charAt(0) + "]";
+		return "P";
 	}
 
 	public Position getNextPosition() {

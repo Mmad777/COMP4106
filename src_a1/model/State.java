@@ -54,7 +54,7 @@ public class State {
 	
 	private void initKnight() {
 
-		knight = new Knight(randomInt(1, SIZE - 1), randomInt(1, SIZE - 1));
+		knight = new Knight(randomInt(1, SIZE - 2), randomInt(1, SIZE - 2));
 		
 	}
 	
