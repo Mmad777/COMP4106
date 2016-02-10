@@ -16,11 +16,11 @@ public class View {
 		this.size = size;
 	}
 	
-	public void drawStatesWithDelay(List<State> states) {
+	public void drawStates(List<State> states) {
 
 		states.stream().forEach(s -> {
 			
-			draw(s);
+			draw(false, s);
 
 			if (USE_DELAY) {
 				
@@ -36,7 +36,17 @@ public class View {
 		
 	}
 	
-	public void draw(State state) {
+	public void draw(boolean initial, State state) {
+		
+		if (initial) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("\nINITIAL STATE ");
+			sb.append("[");
+			sb.append("BOARD_SIZE = " + size);
+			sb.append(", NUM_PAWNS = " + (String.valueOf(state.getPawns().size())));
+			sb.append("]");
+			System.out.println(sb.toString());
+		}
 		
 		String[][] stateDisplay = new String[size][size];
 		
@@ -48,6 +58,8 @@ public class View {
 		
 		Position kPos = state.getKnight().getPosition();
 		stateDisplay[kPos.getX()][kPos.getY()] = state.getKnight().getIcon();
+
+		System.out.println();
 		
 		for (int i=0; i<size; i++) {
 			for (int j=0; j<size; j++) {

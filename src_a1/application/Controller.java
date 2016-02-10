@@ -23,11 +23,11 @@ public class Controller {
         
         // Initialize the board and draw the initial view
 		initialState = new State(true);
-		view.draw(initialState);
+		view.draw(true, initialState);
 		
 		// Pick a search strategy
-		BFSStrategy strategy = new BFSStrategy();
-		//DFSStrategy strategy = new DFSStrategy();
+		//BFSStrategy strategy = new BFSStrategy();
+		DFSStrategy strategy = new DFSStrategy();
 		
 		// Run the search
 		List<State> path = strategy.search(initialState);		
@@ -36,7 +36,7 @@ public class Controller {
 		}
 
 		// Display all of the states along the path
-		view.drawStatesWithDelay(path);
+		view.drawStates(path);
 		
 	}
 
