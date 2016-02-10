@@ -94,7 +94,7 @@ public class State {
 	}
 	
 	private boolean isValidPos(Position pos) {
-		return pos.getX() > 1 && pos.getY() > 1 && pos.getY() < SIZE - 2 && pos.getX() < SIZE - 2;
+		return pos.getX() > 0 && pos.getY() > 0 && pos.getX() < (SIZE - 1) && pos.getY() < (SIZE - 1);
 	}
 	
 	public boolean isFinished() {
