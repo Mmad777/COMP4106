@@ -30,7 +30,7 @@ public class Controller {
 		//DFSStrategy strategy = new DFSStrategy();
 		
 		// Run the search
-		List<State> path = strategy.search(initialState);		
+		List<State> path = strategy.findGoalPath(initialState);		
 		if (path == null) {
 			logger.info("No path found");
 		}

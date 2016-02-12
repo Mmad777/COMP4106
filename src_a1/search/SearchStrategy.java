@@ -7,7 +7,14 @@ import model.State;
 
 public abstract class SearchStrategy {
 	
-	public abstract List<State> search(State initState);
+	protected abstract Node findGoalState(State initState);
+	
+	public List<State> findGoalPath(State initState) {
+
+		Node goalNode = findGoalState(initState);
+		return goalNode != null ? generateGoalPath(goalNode) : null;
+		
+	}
 	
 	protected List<State> generateGoalPath(Node goalNode) {
 

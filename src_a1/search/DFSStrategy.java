@@ -1,7 +1,6 @@
 package search;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
@@ -13,16 +12,8 @@ import model.State;
 public class DFSStrategy extends SearchStrategy {
 
 	Logger logger = LoggerFactory.getLogger(DFSStrategy.class);
-	
-	@Override
-	public List<State> search(State initState) {
 
-		Node goalNode = dfs(initState);
-		return goalNode != null ? generateGoalPath(goalNode) : null;
-
-	}
-
-	private Node dfs(State initState) {
+	protected Node findGoalState(State initState) {
 
 		Set<String> visitedNodes = new HashSet<String>();
 		Stack<Node> fringe = new Stack<Node>();

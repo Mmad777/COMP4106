@@ -15,16 +15,8 @@ import model.State;
 public class BFSStrategy extends SearchStrategy {
 	
     Logger logger = LoggerFactory.getLogger(BFSStrategy.class);
-
-	@Override
-	public List<State> search(State initState) {
-
-		Node goalNode = bfs(initState);
-		return goalNode != null ? generateGoalPath(goalNode) : null;
-		
-	}
 	
-	private Node bfs(State initState) {
+	protected Node findGoalState(State initState) {
 
 		Set<String> visitedNodes = new HashSet<String>();
 		Queue<Node> fringe = new LinkedList<Node>();
@@ -34,6 +26,8 @@ public class BFSStrategy extends SearchStrategy {
 		while (!fringe.isEmpty()) {
 			iter++;
 			
+			// Remove the current node from the queue, and add it to
+			// the list of visited nodes (unique Id).
 			Node currNode = fringe.remove();
 			visitedNodes.add(currNode.getState().getId());
 			
@@ -45,12 +39,14 @@ public class BFSStrategy extends SearchStrategy {
 				return currNode;
 			}
 			
-			// Add nodes for all children states not yet visited			
+			// Find all children states not yet visited.
 			List<State> nonVisitedStates = currNode.getState().generateSuccessors().stream()
 				.filter(s -> {
 					return !visitedNodes.contains(s.getId());
 				}).collect(Collectors.toList());
 			
+			// If a successor state is the goal state - return that node. Otherwise,
+			// add it to the fringe queue.
 			for (State nonVisitedState : nonVisitedStates) {
 				
 				Node newNode = new Node(currNode, nonVisitedState);
@@ -66,10 +62,6 @@ public class BFSStrategy extends SearchStrategy {
 		}
 		
 		return null;
-		
-	}
-	
-	private void log(Node currNode) {
 		
 	}
 
