@@ -3,16 +3,23 @@ package search;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import model.State;
 
 public abstract class SearchStrategy {
+	
+	Logger logger = LoggerFactory.getLogger(SearchStrategy.class);
 	
 	protected abstract Node findGoalState(State initState);
 	
 	public List<State> findGoalPath(State initState) {
 
 		Node goalNode = findGoalState(initState);
-		return goalNode != null ? generateGoalPath(goalNode) : null;
+		List<State> goalPath = goalNode != null ? generateGoalPath(goalNode) : null;
+		logger.info(goalPath == null ? "No goal path found" : "Goal path = {} states", goalPath.size());
+		return goalPath;
 		
 	}
 	

@@ -28,7 +28,8 @@ public class BFSStrategy extends SearchStrategy {
 			iter++;
 			
 			// Remove the current node from the queue, and add it to
-			// the list of visited nodes (unique Id).
+			// the list of visited nodes (note: it will only be added if the
+			// state has not been visited).
 			Node currNode = fringe.remove();
 			boolean added = visitedNodes.add(currNode.getState().getId());
 			if (!added) {
@@ -38,31 +39,27 @@ public class BFSStrategy extends SearchStrategy {
 			logger.trace("Iteration #{} {}", iter, currNode.toString());
 			if (iter % 50000 == 0) logger.info("Iteration #{} - Fringe Size = {} - Visited Size = {}", iter, fringe.size(), visitedNodes.size());
 			
+			// Check if the current node is the goal state
 			if (isGoalState(currNode.getState())) {
-				logger.info("Solved on iteration #{}", iter);
+				logger.info("Solved (current code) on iteration #{}", iter);
 				return currNode;
 			}
 			
 			// Find all children states not yet visited.
-			List<State> successors = currNode.getState().generateSuccessors();
-			List<State> nonVisitedStates = new ArrayList<State>();
-			for (State successor : successors) {
-				if (!visitedNodes.contains(successor.getId())) {
-					nonVisitedStates.add(successor);
-				}
-			}
+			List<State> nonVisitedStates = currNode.getState().generateSuccessors().stream()
+			.filter(s -> {
+				return !visitedNodes.contains(s.getId());
+			}).collect(Collectors.toList());
 			
 			// If a successor state is the goal state - return that node. Otherwise,
 			// add it to the fringe queue.
 			for (State nonVisitedState : nonVisitedStates) {
 				
-				Node newNode = new Node(currNode, nonVisitedState);
-				
+				Node newNode = new Node(currNode, nonVisitedState);				
 				if (isGoalState(newNode.getState())) {
-					logger.info("Solved on iteration #{}", iter);
+					logger.info("Solved (successor ndoe) on iteration #{}", iter);
 					return newNode;
-				}
-				
+				}				
 				fringe.add(newNode);
 				
 			}

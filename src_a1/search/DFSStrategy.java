@@ -19,12 +19,15 @@ public class DFSStrategy extends SearchStrategy {
 		Stack<Node> fringe = new Stack<Node>();
 		fringe.add(new Node(null, initState));
 
+		int iter = 0;
 		while (!fringe.isEmpty()) {
+			iter++;
 
 			Node currNode = fringe.pop();
 			visitedNodes.add(currNode.getState().getId());
 			
 			if (isGoalState(currNode.getState())) {
+				logger.info("Solved on iteration #{}", iter);
 				return currNode;
 			}
 
