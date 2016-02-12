@@ -1,5 +1,6 @@
 package search;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,7 +30,10 @@ public class BFSStrategy extends SearchStrategy {
 			// Remove the current node from the queue, and add it to
 			// the list of visited nodes (unique Id).
 			Node currNode = fringe.remove();
-			visitedNodes.add(currNode.getState().getId());
+			boolean added = visitedNodes.add(currNode.getState().getId());
+			if (!added) {
+				continue;
+			}
 			
 			logger.trace("Iteration #{} {}", iter, currNode.toString());
 			if (iter % 50000 == 0) logger.info("Iteration #{} - Fringe Size = {} - Visited Size = {}", iter, fringe.size(), visitedNodes.size());
@@ -40,10 +44,13 @@ public class BFSStrategy extends SearchStrategy {
 			}
 			
 			// Find all children states not yet visited.
-			List<State> nonVisitedStates = currNode.getState().generateSuccessors().stream()
-				.filter(s -> {
-					return !visitedNodes.contains(s.getId());
-				}).collect(Collectors.toList());
+			List<State> successors = currNode.getState().generateSuccessors();
+			List<State> nonVisitedStates = new ArrayList<State>();
+			for (State successor : successors) {
+				if (!visitedNodes.contains(successor.getId())) {
+					nonVisitedStates.add(successor);
+				}
+			}
 			
 			// If a successor state is the goal state - return that node. Otherwise,
 			// add it to the fringe queue.
@@ -52,6 +59,7 @@ public class BFSStrategy extends SearchStrategy {
 				Node newNode = new Node(currNode, nonVisitedState);
 				
 				if (isGoalState(newNode.getState())) {
+					logger.info("Solved on iteration #{}", iter);
 					return newNode;
 				}
 				
