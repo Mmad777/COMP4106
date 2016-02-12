@@ -69,7 +69,7 @@ public class State {
 			// 6. Set the state's pawns
 			state.setPawns(sortedPawns);
 			
-			// Sanity check
+			// Sanity check on pawn positions (TODO - change to assert)
 			state.getPawns().forEach(p -> {
 				
 				Position pPos = p.getPosition();

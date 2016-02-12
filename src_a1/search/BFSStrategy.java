@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,15 +44,24 @@ public class BFSStrategy extends SearchStrategy {
 				logger.info("Solved on iteration #{}", iter);
 				return currNode;
 			}
-
+			
 			// Add nodes for all children states not yet visited			
-			currNode.getState().generateSuccessors().stream()
+			List<State> nonVisitedStates = currNode.getState().generateSuccessors().stream()
 				.filter(s -> {
 					return !visitedNodes.contains(s.getId());
-				})
-				.forEach(s -> {
-					fringe.add(new Node(currNode, s));
-				});
+				}).collect(Collectors.toList());
+			
+			for (State nonVisitedState : nonVisitedStates) {
+				
+				Node newNode = new Node(currNode, nonVisitedState);
+				
+				if (isGoalState(newNode.getState())) {
+					return newNode;
+				}
+				
+				fringe.add(newNode);
+				
+			}
 			
 		}
 		
