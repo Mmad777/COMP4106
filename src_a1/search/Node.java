@@ -9,11 +9,17 @@ public class Node {
 	private int id;
 	private Node parent;
 	private State state;
+	private int cost;
 	
 	public Node(Node parent, State state) {
 		this.parent = parent;
 		this.state = state;
 		this.id = Node.ID++;
+	}
+	
+	public Node(Node parent, State state, int cost) {
+		this(parent, state);
+		this.cost = cost;
 	}
 	
 	public Node getParent() {
@@ -26,6 +32,10 @@ public class Node {
 	
 	public int getId() {
 		return id;
+	}
+	
+	public int getCost() {
+		return cost;
 	}
 	
 	@Override

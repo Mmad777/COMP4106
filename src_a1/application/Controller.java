@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import model.State;
+import search.AStarStrategy;
 import search.BFSStrategy;
 import search.DFSStrategy;
 
@@ -26,8 +27,9 @@ public class Controller {
 		view.draw(true, initialState);
 		
 		// Pick a search strategy
-		BFSStrategy strategy = new BFSStrategy();
+		//BFSStrategy strategy = new BFSStrategy();
 		//DFSStrategy strategy = new DFSStrategy();
+		AStarStrategy strategy = new AStarStrategy();
 		
 		// Run the search
 		List<State> path = strategy.findGoalPath(initialState);		
