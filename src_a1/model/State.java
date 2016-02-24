@@ -186,7 +186,10 @@ public class State {
 	
     @Override
 	public int hashCode() {
-    	return Integer.parseInt(this.getId());
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((this.getId() == null) ? 0 : this.getId().hashCode());
+		return result;
 	}
 
 	@Override
@@ -198,27 +201,10 @@ public class State {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+		
 		State other = (State) obj;
-		if (knight == null) {
-			if (other.knight != null)
-				return false;
-		} else if (!knight.equals(other.knight))
+		if (!getId().equals(other.getId())) {
 			return false;
-		if (pawns == null) {
-			if (other.pawns != null)
-				return false;
-		} else {
-			
-			StringBuilder pawnsStr = new StringBuilder();
-			pawns.forEach(p -> { pawnsStr.append(p.getPosition()); } );
-			
-			StringBuilder otherPawnStr = new StringBuilder();
-			other.pawns.forEach(p -> { otherPawnStr.append(p.getPosition()); } );
-			
-			if (!pawnsStr.equals(otherPawnStr)) {
-				return false;
-			}
-			
 		}
 		
 		return true;

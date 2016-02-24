@@ -1,10 +1,8 @@
 package search;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -28,6 +26,8 @@ public class AStarStrategy extends SearchStrategy {
 		int iter = 0;
 		while (!open.isEmpty()) {
 			iter++;
+
+			logger.info("Iteration {}", iter);
 			
 			Node currNode = open.poll();
 			closed.add(currNode);
@@ -91,20 +91,13 @@ public class AStarStrategy extends SearchStrategy {
 		@Override
 		public int compare(Node n1, Node n2) {
 			
-			int s1e = evaluate(n1);
-			int s2e = evaluate(n2);
-			
-			if (s1e < s2e) return -1;
-			if (s1e > s2e) return 1;
+			if (n1.getTotalCost() < n2.getTotalCost()) return -1;
+			if (n1.getTotalCost() > n2.getTotalCost()) return 1;
 			
 			return 0;
 			
 		}
 		
-	}
-	
-	private int evaluate(Node node) {
-		return node.getGCost() + heuristic(node.getState());
 	}
 
 	private int heuristic(State state) {
