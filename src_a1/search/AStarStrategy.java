@@ -18,7 +18,10 @@ public class AStarStrategy extends SearchStrategy {
 	@Override
 	protected Node findGoalState(State initState) {
 
+		// use a HashMap<State, Node> and use containsKey
 		Set<Node> closed = new HashSet<Node>();
+		
+		// Use a HashMap<State, Node> and use containsKey
 		PriorityQueue<Node> open = 
             new PriorityQueue<Node>(10, new NodeComparator());    
 		open.add(new Node(null, initState));
@@ -30,7 +33,10 @@ public class AStarStrategy extends SearchStrategy {
 			logger.info("Iteration {}", iter);
 			
 			Node currNode = open.poll();
+			// remove from open HashMap
+			
 			closed.add(currNode);
+			// add to closed HashMap instead
 			
 			// Check if the current node is the goal state
 			if (isGoalState(currNode.getState())) {
@@ -54,20 +60,27 @@ public class AStarStrategy extends SearchStrategy {
 						return newNode;
 					}
 					
+					// add to open HashMap
 					open.add(newNode);					
 					continue;
 					
 				}
 				
+				// already been added to open
 				if (open.contains(newNode)) {
 					
+					// get the node from the open HashMap
 					Node prevNode = findNodeInOpen(open, newNode);
+					
+					// remove old one from priorityqueue and all of its children
 					if (prevNode.getTotalCost() > newNode.getTotalCost()) {
 						prevNode.setParent(newNode.getParent());
 						prevNode.setGCost(newNode.getGCost());
 					}
 					
 				}
+				
+				// already been added to closed - continue
 				
 			}
 			
