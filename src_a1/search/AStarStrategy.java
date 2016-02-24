@@ -1,10 +1,10 @@
 package search;
 
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,26 +17,28 @@ public class AStarStrategy extends SearchStrategy {
 
 	@Override
 	protected Node findGoalState(State initState) {
-
-		// use a HashMap<State, Node> and use containsKey
-		Set<Node> closed = new HashSet<Node>();
 		
-		// Use a HashMap<State, Node> and use containsKey
+		Map<State, Node> closed = new HashMap<State, Node>();
+		
 		PriorityQueue<Node> open = 
             new PriorityQueue<Node>(10, new NodeComparator());    
-		open.add(new Node(null, initState));
+		Map<State, Node> openMap = new HashMap<State, Node>();
+		
+		// Initialize root node, and add to open
+		Node initNode = new Node(null, initState);
+		open.add(initNode);
+		openMap.put(initState, initNode);
 		
 		int iter = 0;
 		while (!open.isEmpty()) {
 			iter++;
-
-			logger.info("Iteration {}", iter);
 			
 			Node currNode = open.poll();
-			// remove from open HashMap
+			openMap.remove(currNode.getState(), currNode);
 			
-			closed.add(currNode);
-			// add to closed HashMap instead
+			if (!closed.containsKey(currNode.getState())) {
+				closed.put(currNode.getState(), currNode);
+			}			
 			
 			// Check if the current node is the goal state
 			if (isGoalState(currNode.getState())) {
@@ -48,39 +50,34 @@ public class AStarStrategy extends SearchStrategy {
 			List<State> successors = currNode.getState().generateSuccessors();
 			for (State s : successors) {
 				
-				// Initialize a new node for the state
-				// TODO - Set h cost of newNode
+				// Skip if state is already in closed list
+				if (closed.containsKey(s)) {
+					continue;
+				}
+				
 				Node newNode = new Node(currNode, s, currNode.getGCost() + 1);
 				
 				// Check whether it was previously generated
-				if (!open.contains(newNode) && !closed.contains(newNode)) {
+				if (!openMap.containsKey(s)) {
 
 					if (isGoalState(newNode.getState())) {
 						logger.info("Solved (current code) on iteration #{}", iter);
 						return newNode;
 					}
 					
-					// add to open HashMap
+					openMap.put(s, newNode);
 					open.add(newNode);					
 					continue;
 					
 				}
 				
-				// already been added to open
-				if (open.contains(newNode)) {
-					
-					// get the node from the open HashMap
-					Node prevNode = findNodeInOpen(open, newNode);
-					
-					// remove old one from priorityqueue and all of its children
-					if (prevNode.getTotalCost() > newNode.getTotalCost()) {
-						prevNode.setParent(newNode.getParent());
-						prevNode.setGCost(newNode.getGCost());
-					}
-					
-				}
-				
-				// already been added to closed - continue
+//					Node prevNode = openMap.get(s);
+//					
+//					// remove old one from priorityqueue and all of its children
+//					if (prevNode.getTotalCost() > newNode.getTotalCost()) {
+//						prevNode.setParent(newNode.getParent());
+//						prevNode.setGCost(newNode.getGCost());
+//					}
 				
 			}
 			
@@ -89,14 +86,6 @@ public class AStarStrategy extends SearchStrategy {
 		
 		return null;
 		
-	}
-	
-	private Node findNodeInClosed(Set<Node> closed, Node node) {
-		return closed.stream().filter(n -> n.equals(node)).findFirst().get();
-	}
-	
-	private Node findNodeInOpen(PriorityQueue<Node> open, Node node) {
-		return open.stream().filter(n -> n.equals(node)).findFirst().get();
 	}
 	
 	private class NodeComparator implements Comparator<Node> {
