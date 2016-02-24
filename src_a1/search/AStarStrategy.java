@@ -1,8 +1,10 @@
 package search;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -17,21 +19,18 @@ public class AStarStrategy extends SearchStrategy {
 
 	@Override
 	protected Node findGoalState(State initState) {
-		
-		Set<String> visitedNodes = new HashSet<String>();
-        PriorityQueue<Node> fringe = 
+
+		Set<Node> closed = new HashSet<Node>();
+		PriorityQueue<Node> open = 
             new PriorityQueue<Node>(10, new NodeComparator());    
-		fringe.add(new Node(null, initState));
+		open.add(new Node(null, initState));
 		
 		int iter = 0;
-		while (!fringe.isEmpty()) {
+		while (!open.isEmpty()) {
 			iter++;
 			
-			Node currNode = fringe.poll();
-			boolean added = visitedNodes.add(currNode.getState().getId());
-			if (!added) {
-				continue;
-			}
+			Node currNode = open.poll();
+			closed.add(currNode);
 			
 			// Check if the current node is the goal state
 			if (isGoalState(currNode.getState())) {
@@ -39,20 +38,35 @@ public class AStarStrategy extends SearchStrategy {
 				return currNode;
 			}
 
-			// Add nodes for all children states not yet visited
+			// Generate all of the successors of the current node
 			List<State> successors = currNode.getState().generateSuccessors();
-			
 			for (State s : successors) {
 				
-				Node newNode = new Node(currNode, s, currNode.getCost() + 1);
-				if (isGoalState(newNode.getState())) {
-					logger.info("Solved on iteration #{}", iter);
-					return newNode;
+				// Initialize a new node for the state
+				// TODO - Set h cost of newNode
+				Node newNode = new Node(currNode, s, currNode.getGCost() + 1);
+				
+				// Check whether it was previously generated
+				if (!open.contains(newNode) && !closed.contains(newNode)) {
+
+					if (isGoalState(newNode.getState())) {
+						logger.info("Solved (current code) on iteration #{}", iter);
+						return newNode;
+					}
+					
+					open.add(newNode);					
+					continue;
+					
 				}
 				
-				String id = s.getId();
-				if (!visitedNodes.contains(id) && !fringe.contains(id)) {
-					fringe.add(newNode);
+				if (open.contains(newNode)) {
+					
+					Node prevNode = findNodeInOpen(open, newNode);
+					if (prevNode.getTotalCost() > newNode.getTotalCost()) {
+						prevNode.setParent(newNode.getParent());
+						prevNode.setGCost(newNode.getGCost());
+					}
+					
 				}
 				
 			}
@@ -62,6 +76,14 @@ public class AStarStrategy extends SearchStrategy {
 		
 		return null;
 		
+	}
+	
+	private Node findNodeInClosed(Set<Node> closed, Node node) {
+		return closed.stream().filter(n -> n.equals(node)).findFirst().get();
+	}
+	
+	private Node findNodeInOpen(PriorityQueue<Node> open, Node node) {
+		return open.stream().filter(n -> n.equals(node)).findFirst().get();
 	}
 	
 	private class NodeComparator implements Comparator<Node> {
@@ -82,7 +104,7 @@ public class AStarStrategy extends SearchStrategy {
 	}
 	
 	private int evaluate(Node node) {
-		return node.getCost() + heuristic(node.getState());
+		return node.getGCost() + heuristic(node.getState());
 	}
 
 	private int heuristic(State state) {

@@ -18,7 +18,7 @@ public abstract class SearchStrategy {
 
 		Node goalNode = findGoalState(initState);
 		List<State> goalPath = goalNode != null ? generateGoalPath(goalNode) : null;
-		logger.info(goalPath == null ? "No goal path found" : "Goal path = {} states", goalPath.size());
+		logger.info(goalPath == null ? "No goal path found" : ("Goal path = " + goalPath.size() + " states"));
 		return goalPath;
 		
 	}

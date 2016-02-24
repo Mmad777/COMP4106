@@ -33,12 +33,9 @@ public class Controller {
 		
 		// Run the search
 		List<State> path = strategy.findGoalPath(initialState);		
-		if (path == null) {
-			logger.info("No path found");
+		if (path != null) {
+			view.drawStates(path);
 		}
-
-		// Display all of the states along the path
-		view.drawStates(path);
 		
 	}
 

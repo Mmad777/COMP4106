@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import model.Pawn.MoveDirection;
 
 public class State {
-	
-    Logger logger = LoggerFactory.getLogger(State.class);
+
+	Logger logger = LoggerFactory.getLogger(State.class);
 	
 	public final static int BOARD_SIZE = 20;
 	private final int NUM_PAWNS = 5;
@@ -69,7 +69,7 @@ public class State {
 			// 6. Set the state's pawns
 			state.setPawns(sortedPawns);
 			
-			// Sanity check on pawn positions (TODO - change to assert)
+			// Sanity check on pawn positions
 			state.getPawns().forEach(p -> {
 				
 				Position pPos = p.getPosition();
@@ -144,7 +144,6 @@ public class State {
 	
 	private void initPawns() {
 		
-		// TODO - Randomly generate number of pawns?
 		IntStream.range(0, NUM_PAWNS).forEach(i -> {
 			
 			int xMax = BOARD_SIZE - 2;		// -1 for array index and border
@@ -183,6 +182,47 @@ public class State {
 	private int randomInt(int min, int max) {
 		Random rand = new Random();
 		return rand.nextInt((max + 1) - min) + min;		
+	}
+	
+    @Override
+	public int hashCode() {
+    	return Integer.parseInt(this.getId());
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		State other = (State) obj;
+		if (knight == null) {
+			if (other.knight != null)
+				return false;
+		} else if (!knight.equals(other.knight))
+			return false;
+		if (pawns == null) {
+			if (other.pawns != null)
+				return false;
+		} else {
+			
+			StringBuilder pawnsStr = new StringBuilder();
+			pawns.forEach(p -> { pawnsStr.append(p.getPosition()); } );
+			
+			StringBuilder otherPawnStr = new StringBuilder();
+			other.pawns.forEach(p -> { otherPawnStr.append(p.getPosition()); } );
+			
+			if (!pawnsStr.equals(otherPawnStr)) {
+				return false;
+			}
+			
+		}
+		
+		return true;
+		
 	}
 
 }
