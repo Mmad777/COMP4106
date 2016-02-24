@@ -20,9 +20,10 @@ public class Node {
 		this.gCost = 0;
 	}
 	
-	public Node(Node parent, State state, int cost) {
+	public Node(Node parent, State state, int gCost, int hCost) {
 		this(parent, state);
-		this.gCost = cost;
+		this.gCost = gCost;
+		this.hCost = hCost;
 	}
 	
 	public Node getParent() {

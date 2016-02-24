@@ -23,15 +23,21 @@ public class State {
 	private List<Pawn> pawns;
 	
 	public State() {
-		this(false);
+		this(false, true);
 	}
 	
-	public State(boolean initialize) {
+	public State(boolean initialize, boolean random) {
 		
 		pawns = new ArrayList<Pawn>();
 		
 		if (initialize) {
-			initBoard();
+			
+			if (random) 
+				initBoardRandom();
+			else
+				initBoardFixed();
+			
+			
 		}
 		
 	}
@@ -132,17 +138,28 @@ public class State {
 	public void setPawns(List<Pawn> pawns) {
 		this.pawns = pawns;
 	}
+	
+	private void initBoardFixed() {
 
-	private void initBoard() {
-		initKnight();
-		initPawns();
+		knight = new Knight(5, 5);	
+		pawns.add(new Pawn(3, 10, 3, 10, MoveDirection.UP));
+		pawns.add(new Pawn(10, 1, 10, 1, MoveDirection.LEFT));
+		pawns.add(new Pawn(2, 18, 2, 18, MoveDirection.RIGHT));
+		pawns.add(new Pawn(15, 4, 15, 4, MoveDirection.DOWN));
+		pawns.add(new Pawn(12, 12, 12, 12, MoveDirection.LEFT));
+		
+	}
+
+	private void initBoardRandom() {
+		initKnightRandom();
+		initPawnsRandom();
 	}
 	
-	private void initKnight() {
+	private void initKnightRandom() {
 		knight = new Knight(randomInt(1, BOARD_SIZE - 2), randomInt(1, BOARD_SIZE - 2));		
 	}
 	
-	private void initPawns() {
+	private void initPawnsRandom() {
 		
 		IntStream.range(0, NUM_PAWNS).forEach(i -> {
 			

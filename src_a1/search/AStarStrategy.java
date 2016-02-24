@@ -13,7 +13,12 @@ import model.State;
 
 public class AStarStrategy extends SearchStrategy {
 
-	Logger logger = LoggerFactory.getLogger(AStarStrategy.class);
+	private Logger logger = LoggerFactory.getLogger(AStarStrategy.class);
+	
+	// The heuristic to use
+	//private Heuristic heuristic = new Heuristic.PawnCountHeuristic();
+	//private Heuristic heuristic = new Heuristic.PawnDistanceHeuristic();
+	private Heuristic heuristic = new Heuristic.ClosestPawnHeuristic();
 
 	@Override
 	protected Node findGoalState(State initState) {
@@ -55,7 +60,7 @@ public class AStarStrategy extends SearchStrategy {
 					continue;
 				}
 				
-				Node newNode = new Node(currNode, s, currNode.getGCost() + 1);
+				Node newNode = new Node(currNode, s, currNode.getGCost() + 1, heuristic.evaluate(s));
 				
 				// Check whether it was previously generated
 				if (!openMap.containsKey(s)) {
@@ -71,6 +76,7 @@ public class AStarStrategy extends SearchStrategy {
 					
 				}
 				
+				// TODO - Update costs of previously generated nodes...
 //					Node prevNode = openMap.get(s);
 //					
 //					// remove old one from priorityqueue and all of its children
@@ -91,19 +97,10 @@ public class AStarStrategy extends SearchStrategy {
 	private class NodeComparator implements Comparator<Node> {
 
 		@Override
-		public int compare(Node n1, Node n2) {
-			
-			if (n1.getTotalCost() < n2.getTotalCost()) return -1;
-			if (n1.getTotalCost() > n2.getTotalCost()) return 1;
-			
-			return 0;
-			
+		public int compare(Node n1, Node n2) {			
+			return n1.getTotalCost() - n2.getTotalCost();			
 		}
 		
-	}
-
-	private int heuristic(State state) {
-		return 0;
 	}
 
 }

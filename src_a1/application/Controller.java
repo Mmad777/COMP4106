@@ -23,7 +23,7 @@ public class Controller {
 		view = new View(State.BOARD_SIZE);
         
         // Initialize the board and draw the initial view
-		initialState = new State(true);
+		initialState = new State(true, false);
 		view.draw(true, initialState);
 		
 		// Pick a search strategy
