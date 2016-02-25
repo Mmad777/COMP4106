@@ -9,6 +9,7 @@ import model.State;
 import search.AStarStrategy;
 import search.BFSStrategy;
 import search.DFSStrategy;
+import search.SearchStrategy;
 
 public class Controller {
 
@@ -27,9 +28,9 @@ public class Controller {
 		view.draw(true, initialState);
 		
 		// Pick a search strategy
-		//BFSStrategy strategy = new BFSStrategy();
-		//DFSStrategy strategy = new DFSStrategy();
-		AStarStrategy strategy = new AStarStrategy();
+		//SearchStrategy strategy = new BFSStrategy();
+		//SearchStrategy strategy = new DFSStrategy();
+		SearchStrategy strategy = new AStarStrategy();
 		
 		// Run the search
 		List<State> path = strategy.findGoalPath(initialState);		
@@ -40,11 +41,11 @@ public class Controller {
 		
 	}
 	
-	private void log(AStarStrategy strategy, List<State> path) {
+	private void log(SearchStrategy strategy, List<State> path) {
 		
 		System.out.println();
 		logger.info("Size \t= {}x{}", State.BOARD_SIZE, State.BOARD_SIZE);
-		logger.info("# Pawns \t= {}", initialState.getPawns().size());
+		logger.info("# Pawns \t= {}", State.NUM_PAWNS);
 		logger.info("Strategy \t= {}", strategy);
 		logger.info("Goal Path \t= {} states", path.size());
 		logger.info("Iteration \t= {}", strategy.getGoalStateIteration());

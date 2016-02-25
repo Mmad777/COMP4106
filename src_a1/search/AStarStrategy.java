@@ -15,7 +15,6 @@ public class AStarStrategy extends SearchStrategy {
 
 	private Logger logger = LoggerFactory.getLogger(AStarStrategy.class);
 	
-	// The heuristic to use
 	private Heuristic heuristic = new Heuristic.PawnCountHeuristic();
 	//private Heuristic heuristic = new Heuristic.PawnDistanceHeuristic();
 	//private Heuristic heuristic = new Heuristic.AverageHeuristic();

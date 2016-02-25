@@ -38,16 +38,6 @@ public class View {
 	
 	public void draw(boolean initial, State state) {
 		
-		if (initial) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("\nINITIAL STATE ");
-			sb.append("[");
-			sb.append("BOARD_SIZE = " + size);
-			sb.append(", NUM_PAWNS = " + (String.valueOf(state.getPawns().size())));
-			sb.append("]");
-			System.out.println(sb.toString());
-		}
-		
 		String[][] stateDisplay = new String[size][size];
 		
 		state.getPawns().stream().forEach(e -> {
