@@ -24,23 +24,19 @@ public class BFSStrategy extends SearchStrategy {
 		
 		int iter = 0;
 		while (!fringe.isEmpty()) {
-			iter++;
+			iter++;			
+			logger.trace("Iteration #{}", iter);
 			
-			// Remove the current node from the queue, and add it to
-			// the list of visited nodes (note: it will only be added if the
-			// state has not been visited).
 			Node currNode = fringe.remove();
 			boolean added = visitedNodes.add(currNode.getState().getId());
 			if (!added) {
 				continue;
 			}
 			
-			logger.trace("Iteration #{} {}", iter, currNode.toString());
-			if (iter % 50000 == 0) logger.info("Iteration #{} - Fringe Size = {} - Visited Size = {}", iter, fringe.size(), visitedNodes.size());
 			
 			// Check if the current node is the goal state
 			if (isGoalState(currNode.getState())) {
-				logger.info("Solved (current code) on iteration #{}", iter);
+				goalStateIteration = iter;
 				return currNode;
 			}
 			
@@ -56,7 +52,7 @@ public class BFSStrategy extends SearchStrategy {
 				
 				Node newNode = new Node(currNode, nonVisitedState);				
 				if (isGoalState(newNode.getState())) {
-					logger.info("Solved (successor ndoe) on iteration #{}", iter);
+					goalStateIteration = iter;
 					return newNode;
 				}				
 				fringe.add(newNode);

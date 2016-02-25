@@ -27,7 +27,7 @@ public class DFSStrategy extends SearchStrategy {
 			visitedNodes.add(currNode.getState().getId());
 			
 			if (isGoalState(currNode.getState())) {
-				logger.info("Solved on iteration #{}", iter);
+				goalStateIteration = iter;
 				return currNode;
 			}
 

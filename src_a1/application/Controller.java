@@ -35,6 +35,9 @@ public class Controller {
 		List<State> path = strategy.findGoalPath(initialState);		
 		if (path != null) {
 			view.drawStates(path);
+			logger.info("Strategy \t= {}", strategy.getClass().getSimpleName());
+			logger.info("Goal path \t= {} states", path.size());
+			logger.info("Iteration \t= {}", strategy.getGoalStateIteration());
 		}
 		
 	}

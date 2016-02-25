@@ -14,13 +14,18 @@ public abstract class SearchStrategy {
 	
 	protected abstract Node findGoalState(State initState);
 	
+	protected int goalStateIteration;
+	
 	public List<State> findGoalPath(State initState) {
 
 		Node goalNode = findGoalState(initState);
 		List<State> goalPath = goalNode != null ? generateGoalPath(goalNode) : null;
-		logger.info(goalPath == null ? "No goal path found" : ("Goal path = " + goalPath.size() + " states"));
 		return goalPath;
 		
+	}
+	
+	public int getGoalStateIteration() {
+		return goalStateIteration;
 	}
 	
 	protected List<State> generateGoalPath(Node goalNode) {

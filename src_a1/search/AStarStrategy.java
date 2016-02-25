@@ -47,7 +47,7 @@ public class AStarStrategy extends SearchStrategy {
 			
 			// Check if the current node is the goal state
 			if (isGoalState(currNode.getState())) {
-				logger.info("Solved (current code) on iteration #{}", iter);
+				goalStateIteration = iter;
 				return currNode;
 			}
 
@@ -66,7 +66,7 @@ public class AStarStrategy extends SearchStrategy {
 				if (!openMap.containsKey(s)) {
 
 					if (isGoalState(newNode.getState())) {
-						logger.info("Solved (current code) on iteration #{}", iter);
+						goalStateIteration = iter;
 						return newNode;
 					}
 					
