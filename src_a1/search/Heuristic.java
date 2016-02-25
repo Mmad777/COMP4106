@@ -1,5 +1,6 @@
 package search;
 
+import model.Knight;
 import model.Pawn;
 import model.State;
 
@@ -21,16 +22,9 @@ public interface Heuristic {
 		@Override
 		public int evaluate(State state) {
 			
-			int knightX = state.getKnight().getPosition().getX();
-			int knightY = state.getKnight().getPosition().getY();
-			
 			int distance = 0;
 			for (Pawn p : state.getPawns()) {
-
-				double diffX = Math.pow(p.getPosition().getX() - knightX, 2);
-				double diffY = Math.pow(p.getPosition().getY() - knightY, 2);
-				distance += Math.sqrt(diffX + diffY);
-				
+				distance += Heuristic.calculateDistance(state.getKnight(), p);				
 			}
 			
 			return distance;
@@ -44,16 +38,10 @@ public interface Heuristic {
 		@Override
 		public int evaluate(State state) {
 			
-			int knightX = state.getKnight().getPosition().getX();
-			int knightY = state.getKnight().getPosition().getY();
-			
 			double minDistance = 0;
 			for (Pawn p : state.getPawns()) {
-
-				double diffX = Math.pow(p.getPosition().getX() - knightX, 2);
-				double diffY = Math.pow(p.getPosition().getY() - knightY, 2);
-				double distance = Math.sqrt(diffX + diffY);
 				
+				double distance = Heuristic.calculateDistance(state.getKnight(), p);
 				if (minDistance == 0 || distance < minDistance) {
 					minDistance = distance;
 				}
@@ -63,6 +51,33 @@ public interface Heuristic {
 			return (int) minDistance;
 			
 		}
+		
+	}
+	
+	public class AverageHeuristic implements Heuristic {
+
+		@Override
+		public int evaluate(State state) {
+			
+			int pawnCount = new PawnCountHeuristic().evaluate(state);
+			int pawnDistance = new PawnDistanceHeuristic().evaluate(state);
+			return (pawnCount + pawnDistance) / 2;
+			
+		}
+		
+		
+	}
+	
+	static int calculateDistance(Knight knight, Pawn pawn) {
+		
+		int knightX = knight.getPosition().getX();
+		int knightY = knight.getPosition().getY();
+
+		double diffX = Math.pow(pawn.getPosition().getX() - knightX, 2);
+		double diffY = Math.pow(pawn.getPosition().getY() - knightY, 2);
+		double distance = Math.sqrt(diffX + diffY);
+		
+		return (int) distance;
 		
 	}
 

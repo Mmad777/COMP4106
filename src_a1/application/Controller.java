@@ -35,10 +35,20 @@ public class Controller {
 		List<State> path = strategy.findGoalPath(initialState);		
 		if (path != null) {
 			view.drawStates(path);
-			logger.info("Strategy \t= {}", strategy.getClass().getSimpleName());
-			logger.info("Goal path \t= {} states", path.size());
-			logger.info("Iteration \t= {}", strategy.getGoalStateIteration());
+			log(strategy, path);
 		}
+		
+	}
+	
+	private void log(AStarStrategy strategy, List<State> path) {
+		
+		System.out.println();
+		logger.info("Size \t= {}x{}", State.BOARD_SIZE, State.BOARD_SIZE);
+		logger.info("# Pawns \t= {}", initialState.getPawns().size());
+		logger.info("Strategy \t= {}", strategy);
+		logger.info("Goal Path \t= {} states", path.size());
+		logger.info("Iteration \t= {}", strategy.getGoalStateIteration());
+		
 		
 	}
 

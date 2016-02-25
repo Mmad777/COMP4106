@@ -10,7 +10,7 @@ import model.State;
 
 public abstract class SearchStrategy {
 	
-	Logger logger = LoggerFactory.getLogger(SearchStrategy.class);
+	private Logger logger = LoggerFactory.getLogger(SearchStrategy.class);
 	
 	protected abstract Node findGoalState(State initState);
 	
@@ -44,6 +44,11 @@ public abstract class SearchStrategy {
 
 	protected boolean isGoalState(State state) {
 		return state.allPawnsCaptured();
+	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName();
 	}
 
 }
