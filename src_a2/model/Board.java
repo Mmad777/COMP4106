@@ -25,13 +25,18 @@ public class Board extends Observable {
 	}
 	
 	private void initPits() {
+		
 		pits = Stream.generate(Pit::new).limit(NUM_PLAYERS)
 				.map(p -> Stream.generate(Pit::new).limit(size).toArray(Pit[]::new)).toArray(Pit[][]::new);
+		
+		Stream.of(pits)
+	    .flatMap(Stream::of)
+	        .forEach(p -> p.addStones(numStones));		
 		
 	}
 	
 	private void initMancalas() {
-		mancalas = Stream.generate(Mancala::new).limit(NUM_PLAYERS).toArray(Mancala[]::new);		
+		mancalas = Stream.generate(Mancala::new).limit(NUM_PLAYERS).toArray(Mancala[]::new);	
 	}
 	
 	public Pit[][] getPits() {
@@ -47,7 +52,10 @@ public class Board extends Observable {
 		return false;
 	}
 	
-	public void move() {
+	public void move(int player, int pit) {
+		
+		
+		
 		notifyObservers();
 	}
 
