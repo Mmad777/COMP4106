@@ -1,5 +1,7 @@
 package application;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,13 +14,27 @@ public class MancalaController {
 	private Game game;
 	private MancalaView view;
 	
-	public MancalaController() {
+	public MancalaController() throws NumberFormatException, IOException {
 		
 		game = new Game(6, 6);
 		view = new MancalaView(game.getBoard());
 		
-		// Manually update the display initially
-		view.draw();
+		// Draw the board initially
+		view.displayBoard();
+		
+		// Main game loop
+		while (!game.getBoard().isGameOver()) {
+			
+			int pitSelection = view.getPitSelection();
+			if (!game.getBoard().move(game.getBoard().getActivePlayer(), pitSelection)) {
+				game.getBoard().toggleActivePlayer();
+			}
+			
+		}
+		
+		game.getBoard().emptyStonesIntoMancalas();
+		view.displayBoard();
+		view.displayWinner(game.determineWinner());
 		
 	}
 

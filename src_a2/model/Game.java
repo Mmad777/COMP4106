@@ -7,12 +7,11 @@ import util.MathUtil;
 public class Game extends Observable {
 	
 	private Board board;
-	private int activePlayer;
 	
 	public Game(int size, int numStones) {
 		
 		board = new Board(size, numStones);
-		activePlayer = MathUtil.randomInt(0, 1);
+		board.setActivePlayer(MathUtil.randomInt(0, 1));
 
 		board.addObserver( (obj, arg) -> {
             notifyObservers(board);
@@ -22,6 +21,11 @@ public class Game extends Observable {
 	
 	public Board getBoard() {
 		return board;
+	}
+	
+	public int determineWinner() {
+		// TODO
+		return -1;
 	}
 
 }

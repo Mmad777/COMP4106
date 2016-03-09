@@ -1,5 +1,9 @@
 package application;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import model.Board;
 import model.Pit;
 
@@ -16,11 +20,24 @@ public class MancalaView {
 		
 	}
 	
-	public void draw() {
+	public void displayBoard() {
 		
 		drawTopPlayer();
 		drawBottomPlayer();
 		println("");
+		
+	}
+
+	public void displayWinner(int determineWinner) {
+		// TODO
+	}
+	
+	public int getPitSelection() throws NumberFormatException, IOException {
+		
+		BufferedReader br  = new  BufferedReader(new InputStreamReader(System.in));
+		println("Player " + board.getActivePlayer() + ", please enter a pit number (1-6):");
+		int num = Integer.parseInt(br.readLine());
+		return num;
 		
 	}
 	

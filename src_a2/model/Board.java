@@ -15,6 +15,8 @@ public class Board extends Observable {
 	private Pit[][] pits;
 	private Mancala[] mancalas;
 	
+	private int activePlayer;
+	
 	public Board(int size, int numStones) {
 		this.size = size;
 		this.numStones = numStones;
@@ -38,6 +40,18 @@ public class Board extends Observable {
 	private void initMancalas() {
 		mancalas = Stream.generate(Mancala::new).limit(NUM_PLAYERS).toArray(Mancala[]::new);	
 	}
+
+	public int getActivePlayer() {
+		return activePlayer;
+	}
+
+	public void setActivePlayer(int activePlayer) {
+		this.activePlayer = activePlayer;
+	}
+	
+	public void toggleActivePlayer() {
+		activePlayer ^= 1;
+	}
 	
 	public Pit[][] getPits() {
 		return pits;
@@ -47,16 +61,32 @@ public class Board extends Observable {
 		return mancalas;
 	}
 	
+	/**
+	 * Moves a given players stones from a specified pit.
+	 * 
+	 * @param player - the player selecting the pit
+	 * @param pit - the pit number to move
+	 * @return true if the player can move again
+	 */
+	public boolean move(int player, int pit) {
+	
+		if (player != activePlayer) {
+			throw new IllegalArgumentException("Player is not currently active.");
+		}
+		
+		notifyObservers();
+		
+		return true;
+		
+	}
+	
 	public boolean isGameOver() {
 		// TODO
 		return false;
 	}
 	
-	public void move(int player, int pit) {
-		
-		
-		
-		notifyObservers();
+	public void emptyStonesIntoMancalas() {
+		// TODO
 	}
 
 }
