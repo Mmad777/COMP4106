@@ -3,6 +3,8 @@ package model;
 import java.util.Observable;
 import java.util.stream.Stream;
 
+import util.MathUtil;
+
 public class Board extends Observable {
 	
 	private final int DEFAULT_SIZE 			= 6;
@@ -20,6 +22,8 @@ public class Board extends Observable {
 	public Board(int size, int numStones) {
 		this.size = size;
 		this.numStones = numStones;
+		
+		activePlayer = MathUtil.randomInt(0, 1);
 		
 		initPits();
 		initMancalas();
@@ -65,17 +69,41 @@ public class Board extends Observable {
 	 * Moves a given players stones from a specified pit.
 	 * 
 	 * @param player - the player selecting the pit
-	 * @param pit - the pit number to move
+	 * @param pitNum - the pit number to move
 	 * @return true if the player can move again
 	 */
-	public boolean move(int player, int pit) {
+	public boolean move(int player, int pitNum) {
 	
 		if (player != activePlayer) {
 			throw new IllegalArgumentException("Player is not currently active.");
 		}
 		
-		notifyObservers();
+		Pit pit = pits[player][pitNum];
 		
+		// Allow the player to select again
+		if (pit.isEmpty()) {
+			return true;
+		}
+		
+		// Distribute the stones in a counter clockwise direction
+		int row = player;
+		int initialNum = pit.getStones();
+		int numLeft = initialNum;
+		while (numLeft != 0) {
+			pitNum--;
+			
+			if (pitNum > 0 && pitNum < size) {
+				pits[player][pitNum].addStones(1);
+			}
+			
+			numLeft--;
+		}
+		
+		// Remove them all from the initial pit
+		pit.removeStones(initialNum);
+		
+		setChanged();
+		notifyObservers(this);		
 		return true;
 		
 	}
@@ -87,6 +115,11 @@ public class Board extends Observable {
 	
 	public void emptyStonesIntoMancalas() {
 		// TODO
+	}
+
+	public int determineWinner() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

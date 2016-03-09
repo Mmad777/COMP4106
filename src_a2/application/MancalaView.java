@@ -16,12 +16,14 @@ public class MancalaView {
 		this.board = board;		
 		board.addObserver((obj, arg) -> {
 			this.board = (Board) obj;
+			displayBoard();
 		});
 		
 	}
 	
 	public void displayBoard() {
-		
+
+		println("");
 		drawTopPlayer();
 		drawBottomPlayer();
 		println("");
@@ -35,7 +37,7 @@ public class MancalaView {
 	public int getPitSelection() throws NumberFormatException, IOException {
 		
 		BufferedReader br  = new  BufferedReader(new InputStreamReader(System.in));
-		println("Player " + board.getActivePlayer() + ", please enter a pit number (1-6):");
+		print("Player " + board.getActivePlayer() + ", please enter a pit number (0-5): ");
 		int num = Integer.parseInt(br.readLine());
 		return num;
 		

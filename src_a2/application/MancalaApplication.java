@@ -1,9 +1,17 @@
 package application;
 
+import java.io.IOException;
+
 public class MancalaApplication {
 
 	public static void main(String[] args) {
-        new MancalaController();
+		
+        try {
+			new MancalaController();
+		} catch (NumberFormatException | IOException e) {
+			e.printStackTrace();
+		}
+        
 	}
 
 }
