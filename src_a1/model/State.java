@@ -16,8 +16,8 @@ public class State {
 
 	Logger logger = LoggerFactory.getLogger(State.class);
 	
-	public final static int BOARD_SIZE = 20;
-	public final static int NUM_PAWNS = 5;
+	public final static int BOARD_SIZE = 50;
+	public final static int NUM_PAWNS = 10;
 	
 	private Knight knight;
 	private List<Pawn> pawns;

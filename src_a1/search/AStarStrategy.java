@@ -15,11 +15,11 @@ public class AStarStrategy extends SearchStrategy {
 
 	private Logger logger = LoggerFactory.getLogger(AStarStrategy.class);
 	
-	private Heuristic heuristic = new Heuristic.PawnCountHeuristic();
+	//private Heuristic heuristic = new Heuristic.PawnCountHeuristic();
 	//private Heuristic heuristic = new Heuristic.PawnDistanceHeuristic();
 	//private Heuristic heuristic = new Heuristic.AverageHeuristic();
 	
-	//private Heuristic heuristic = new Heuristic.ClosestPawnHeuristic();
+	private Heuristic heuristic = new Heuristic.ClosestPawnHeuristic();
 
 	@Override
 	protected Node findGoalState(State initState) {

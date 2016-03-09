@@ -28,9 +28,9 @@ public class Controller {
 		view.draw(true, initialState);
 		
 		// Pick a search strategy
-		//SearchStrategy strategy = new BFSStrategy();
+		SearchStrategy strategy = new BFSStrategy();
 		//SearchStrategy strategy = new DFSStrategy();
-		SearchStrategy strategy = new AStarStrategy();
+		//SearchStrategy strategy = new AStarStrategy();
 		
 		// Run the search
 		List<State> path = strategy.findGoalPath(initialState);		
