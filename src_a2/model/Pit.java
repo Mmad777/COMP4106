@@ -26,6 +26,10 @@ public class Pit {
 		
 	}
 	
+	public void removeAllStones() {
+		this.stones = 0;
+	}
+	
 	public boolean isEmpty() {
 		return stones == 0;
 	}

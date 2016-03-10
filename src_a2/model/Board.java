@@ -80,30 +80,47 @@ public class Board extends Observable {
 		
 		Pit pit = pits[player][pitNum];
 		
-		// Allow the player to select again
+		// Allow the player to move again if they selected an empty pit
 		if (pit.isEmpty()) {
 			return true;
 		}
 		
-		// Distribute the stones in a counter clockwise direction
-		int row = player;
-		int initialNum = pit.getStones();
-		int numLeft = initialNum;
-		while (numLeft != 0) {
-			pitNum--;
+
+		int currRow = player;
+		int currPit = pitNum;
+		int direction = (currRow == 0 ? -1 : 1);
+
+		int num = pit.getStones();
+		while (num != 0) {
 			
-			if (pitNum > 0 && pitNum < size) {
-				pits[player][pitNum].addStones(1);
+			currPit = currPit + (1 * direction);
+			
+			if (currPit < 0 || currPit > size - 1) {
+			
+				int tempRow = currRow;
+				currRow ^= 1;
+				direction *= -1;
+				
+				if (tempRow == player) {
+					mancalas[player].addStones(1);
+				} else {
+					continue;
+				}
+				
+			} else {
+				pits[currRow][currPit].addStones(1);
+				
 			}
 			
-			numLeft--;
+			num--;
+			
 		}
 		
-		// Remove them all from the initial pit
-		pit.removeStones(initialNum);
+		pit.removeAllStones();
 		
 		setChanged();
-		notifyObservers(this);		
+		notifyObservers(this);
+		
 		return true;
 		
 	}
