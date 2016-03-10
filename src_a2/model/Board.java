@@ -87,15 +87,15 @@ public class Board extends Observable {
 		
 
 		int currRow = player;
-		int currPit = pitNum;
+		int currPitNum = pitNum;
 		int direction = (currRow == 0 ? -1 : 1);
 
 		int num = pit.getStones();
 		while (num != 0) {
 			
-			currPit = currPit + (1 * direction);
+			currPitNum = currPitNum + (1 * direction);
 			
-			if (currPit < 0 || currPit > size - 1) {
+			if (currPitNum < 0 || currPitNum > size - 1) {
 			
 				int tempRow = currRow;
 				currRow ^= 1;
@@ -103,12 +103,30 @@ public class Board extends Observable {
 				
 				if (tempRow == player) {
 					mancalas[player].addStones(1);
+					
+					// If the last stone is dropped into the mancala, they play again
+					if (num == 1) {
+						return true;
+					}
+					
 				} else {
 					continue;
 				}
 				
 			} else {
-				pits[currRow][currPit].addStones(1);
+				
+				Pit currPit = pits[currRow][currPitNum];
+				
+				// If the last stone is dropped into an empty pit on the player's side,
+				// all of the stones in the pit directly opposite are placed into
+				// their mancala
+				if (currRow == player && currPit.isEmpty() && num == 1) {
+					Pit oppositePit = pits[currRow ^= 1][currPitNum];
+					mancalas[player].addStones(oppositePit.getStones());
+					oppositePit.removeAllStones();
+				}
+				
+				currPit.addStones(1);
 				
 			}
 			
@@ -121,7 +139,7 @@ public class Board extends Observable {
 		setChanged();
 		notifyObservers(this);
 		
-		return true;
+		return false;
 		
 	}
 	
