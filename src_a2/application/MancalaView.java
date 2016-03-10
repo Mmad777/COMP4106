@@ -45,29 +45,29 @@ public class MancalaView {
 	
 	private void drawTopPlayer() {
 		
-		println("-----                         -----");
-		print("| " + board.getMancalas()[0].getStones() + " | ");
+		println("-----                                ------");
+		print(String.format("| %1$2s | ", String.valueOf(board.getMancalas()[0].getStones())));
 		
 		for (Pit pit : board.getPits()[0]) {
-			print("[" + pit.getStones() + "]");
+			print(String.format("[%1$2s]", String.valueOf(pit.getStones())));
 			print(" ");
 		}
 
-		println("|   | ");
+		println("|    | ");
 		
 	}
 	
 	private void drawBottomPlayer() {
 		
-		print("|   | ");
+		print("|    | ");
 		
 		for (Pit pit : board.getPits()[1]) {
-			print("[" + pit.getStones() + "]");
+			print(String.format("[%1$2s]", String.valueOf(pit.getStones())));
 			print(" ");
 		}
-		
-		println("| " + board.getMancalas()[1].getStones() + " | ");
-		println("-----                         -----");
+
+		println(String.format("| %1$2s | ", String.valueOf(board.getMancalas()[1].getStones())));
+		println("-----                                ------");
 		
 	}
 	
