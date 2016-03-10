@@ -1,11 +1,11 @@
-package application;
+package a2.application;
 
 import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import model.Board;
+import a2.model.Board;
 
 public class MancalaController {
 
@@ -25,10 +25,11 @@ public class MancalaController {
 		// Main game loop
 		while (!board.isGameOver()) {
 			
+			// TODO - Only get selection if player vs. computer, and only on player turn
 			int pitSelection = view.getPitSelection();
 			boolean moveAgain = board.move(board.getActivePlayer(), pitSelection);
 			if (!moveAgain) {
-				board.toggleActivePlayer();
+				board.setActivePlayer(board.getActivePlayer() ^ 1);
 			}
 			
 		}

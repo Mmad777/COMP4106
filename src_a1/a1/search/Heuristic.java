@@ -1,8 +1,8 @@
-package search;
+package a1.search;
 
-import model.Knight;
-import model.Pawn;
-import model.State;
+import a1.model.Knight;
+import a1.model.Pawn;
+import a1.model.State;
 
 public interface Heuristic {
 	

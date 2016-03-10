@@ -1,11 +1,11 @@
-package application;
+package a2.application;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import model.Board;
-import model.Pit;
+import a2.model.Board;
+import a2.model.Pit;
 
 public class MancalaView {
 	

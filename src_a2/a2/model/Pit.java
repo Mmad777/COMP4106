@@ -1,4 +1,4 @@
-package model;
+package a2.model;
 
 public class Pit {
 	
@@ -6,6 +6,10 @@ public class Pit {
 	
 	public Pit() { 
 		// Empty constructor
+	}
+	
+	public Pit(int stones) {
+		this.stones = stones;
 	}
 	
 	public int getStones() {

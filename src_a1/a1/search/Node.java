@@ -1,6 +1,6 @@
-package search;
+package a1.search;
 
-import model.State;
+import a1.model.State;
 
 public class Node {
 	private static int ID = 0;

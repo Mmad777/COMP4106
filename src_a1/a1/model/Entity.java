@@ -1,4 +1,4 @@
-package model;
+package a1.model;
 
 abstract public class Entity {
 	

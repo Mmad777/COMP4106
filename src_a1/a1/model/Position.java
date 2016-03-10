@@ -1,4 +1,4 @@
-package model;
+package a1.model;
 
 public class Position {
 

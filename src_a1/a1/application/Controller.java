@@ -1,15 +1,13 @@
-package application;
+package a1.application;
 
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import model.State;
-import search.AStarStrategy;
-import search.BFSStrategy;
-import search.DFSStrategy;
-import search.SearchStrategy;
+import a1.model.State;
+import a1.search.BFSStrategy;
+import a1.search.SearchStrategy;
 
 public class Controller {
 

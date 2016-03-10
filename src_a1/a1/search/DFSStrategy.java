@@ -1,4 +1,4 @@
-package search;
+package a1.search;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -7,7 +7,7 @@ import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import model.State;
+import a1.model.State;
 
 public class DFSStrategy extends SearchStrategy {
 

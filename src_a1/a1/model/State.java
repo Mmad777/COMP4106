@@ -1,4 +1,4 @@
-package model;
+package a1.model;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import model.Pawn.MoveDirection;
+import a1.model.Pawn.MoveDirection;
 
 public class State {
 

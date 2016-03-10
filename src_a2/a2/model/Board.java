@@ -1,4 +1,4 @@
-package model;
+package a2.model;
 
 import java.util.Observable;
 import java.util.stream.Stream;
@@ -7,9 +7,9 @@ import util.MathUtil;
 
 public class Board extends Observable {
 	
-	private final int DEFAULT_SIZE 			= 6;
-	private final int DEFAULT_NUM_STONES 	= 6;
-	private final int NUM_PLAYERS			= 2;
+	private static final int DEFAULT_SIZE 			= 6;
+	private static final int DEFAULT_NUM_STONES 	= 6;
+	private static final int NUM_PLAYERS			= 2;
 	
 	private int size 		= DEFAULT_SIZE;
 	private int numStones 	= DEFAULT_NUM_STONES;
@@ -27,6 +27,24 @@ public class Board extends Observable {
 		
 		initPits();
 		initMancalas();
+		
+	}
+	
+	public Board(Board board) {
+		this.size = board.size;
+		this.numStones = board.numStones;
+		
+		activePlayer = board.activePlayer;
+		
+		for (int i=0; i<NUM_PLAYERS; i++) {
+			for (int j=0; j<size; j++) {
+				this.pits[i][j] = new Pit(board.pits[i][j].getStones());
+			}
+		}
+		
+		for (int i=0; i<NUM_PLAYERS; i++) {
+			mancalas[i] = new Mancala(board.mancalas[i].getStones());
+		}
 		
 	}
 	
@@ -52,9 +70,13 @@ public class Board extends Observable {
 	public void setActivePlayer(int activePlayer) {
 		this.activePlayer = activePlayer;
 	}
+
+	public int getSize() {
+		return size;
+	}
 	
-	public void toggleActivePlayer() {
-		activePlayer ^= 1;
+	public static int getNumPlayers() {
+		return NUM_PLAYERS;
 	}
 	
 	public Pit[][] getPits() {
@@ -146,8 +168,7 @@ public class Board extends Observable {
 	}
 	
 	public boolean isGameOver() {
-		// TODO
-		return false;
+		return Stream.of(pits).flatMap(Stream::of).filter(p -> !p.isEmpty()).count() == 0;
 	}
 	
 	public void emptyStonesIntoMancalas() {

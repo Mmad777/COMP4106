@@ -1,4 +1,4 @@
-package search;
+package a1.search;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import model.State;
+import a1.model.State;
 
 public class BFSStrategy extends SearchStrategy {
 	
