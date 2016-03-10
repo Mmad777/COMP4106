@@ -27,11 +27,16 @@ public class MiniMaxStrategy {
 			Node bestNode = null;
 			for (Node successor : generateSuccessors(node, player)) {
 				Node v = miniMax(successor, depth - 1, true, player ^ 1);
-				bestNode = max(bestNode, v);
+				bestNode = min(bestNode, v);
 			}			
 			return bestNode;
+			
 		}
 		
+	}
+	
+	private Node min(Node bestNode, Node node) {
+		return bestNode != null && bestNode.gethVal() < node.gethVal() ? bestNode : node;
 	}
 	
 	private Node max(Node bestNode, Node node) {
