@@ -84,7 +84,8 @@ public class Board extends Observable {
 		if (pit.isEmpty()) {
 			return true;
 		}
-		
+
+		boolean playAgain = false;
 
 		int currRow = player;
 		int currPitNum = pitNum;
@@ -106,7 +107,8 @@ public class Board extends Observable {
 					
 					// If the last stone is dropped into the mancala, they play again
 					if (num == 1) {
-						return true;
+						playAgain = true;
+						break;
 					}
 					
 				} else {
@@ -139,7 +141,7 @@ public class Board extends Observable {
 		setChanged();
 		notifyObservers(this);
 		
-		return false;
+		return playAgain;
 		
 	}
 	
