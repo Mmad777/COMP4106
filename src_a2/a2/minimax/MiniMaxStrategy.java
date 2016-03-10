@@ -7,6 +7,15 @@ import a2.model.Board;
 
 public class MiniMaxStrategy {
 	
+	private static final int MAX_DEPTH = 10;
+	
+	public Node miniMaxInit(Board board, int player) {
+		
+		Node initNode = new Node(null, board);
+		return miniMax(initNode, MAX_DEPTH, true, player);
+		
+	}
+	
 	public Node miniMax(Node node, int depth, boolean max, int player) {
 		
 		if (depth == 0 || node.getState().isGameOver()) {
@@ -51,8 +60,12 @@ public class MiniMaxStrategy {
 		for (int i=0; i<parent.getSize(); i++) {
 			
 			Board child = new Board(parent);
+			child.setActivePlayer(player);			
 			child.move(player, i);
-			successors.add(new Node(node, child, heuristicOne(child, player)));
+			
+			Node childNode = new Node(node,child, i, heuristicOne(child, player));
+			
+			successors.add(childNode);
 			
 		}
 		

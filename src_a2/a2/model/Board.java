@@ -36,6 +36,9 @@ public class Board extends Observable {
 		
 		activePlayer = board.activePlayer;
 		
+		initPits();
+		initMancalas();
+		
 		for (int i=0; i<NUM_PLAYERS; i++) {
 			for (int j=0; j<size; j++) {
 				this.pits[i][j] = new Pit(board.pits[i][j].getStones());
