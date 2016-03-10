@@ -95,9 +95,10 @@ public class Board extends Observable {
 	 * 
 	 * @param player - the player selecting the pit
 	 * @param pitNum - the pit number to move
+	 * param notify - whether to notify observers or not
 	 * @return true if the player can move again
 	 */
-	public boolean move(int player, int pitNum) {
+	public boolean move(int player, int pitNum, boolean notify) {
 	
 		if (player != activePlayer) {
 			throw new IllegalArgumentException("Player is not currently active.");
@@ -107,6 +108,7 @@ public class Board extends Observable {
 		
 		// Allow the player to move again if they selected an empty pit
 		if (pit.isEmpty()) {
+			System.out.println("selected empty pit");
 			return true;
 		}
 
@@ -163,8 +165,10 @@ public class Board extends Observable {
 		
 		pit.removeAllStones();
 		
-		setChanged();
-		notifyObservers(this);
+		if (notify) {
+			setChanged();
+			notifyObservers(this);
+		}
 		
 		return playAgain;
 		

@@ -32,13 +32,14 @@ public class MancalaController {
 		while (!board.isGameOver()) {
 			
 			int activePlayer = board.getActivePlayer();
-			Node node = strategy.miniMaxInit(board, activePlayer);
-			int selectedPit = node.getSelectedPit();
+			int selectedPit  = strategy.miniMax(board, activePlayer);
+			
+			if (selectedPit == -1) break;
 
 			// TODO - Only get selection if player vs. computer, and only on player turn (for player vs. computer)
 			//int pitSelection = view.getPitSelection();
 			
-			boolean moveAgain = board.move(board.getActivePlayer(), selectedPit);
+			boolean moveAgain = board.move(board.getActivePlayer(), selectedPit, true);
 			if (!moveAgain) {
 				board.setActivePlayer(board.getActivePlayer() ^ 1);
 			}

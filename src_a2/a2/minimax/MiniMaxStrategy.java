@@ -7,12 +7,25 @@ import a2.model.Board;
 
 public class MiniMaxStrategy {
 	
-	private static final int MAX_DEPTH = 10;
+	private static final int MAX_DEPTH = 4;
 	
-	public Node miniMaxInit(Board board, int player) {
+	public int miniMax(Board board, int player) {
 		
-		Node initNode = new Node(null, board);
-		return miniMax(initNode, MAX_DEPTH, true, player);
+		Node rootNode = new Node(null, board);
+		Node lastNode = miniMax(rootNode, MAX_DEPTH, true, player);
+		
+		Node currNode = lastNode;
+		while (currNode != null) {
+			
+			if (currNode.getParent() == rootNode) {
+				return currNode.getSelectedPit();
+			}
+			
+			currNode = currNode.getParent();
+			
+		}
+		
+		return -1;
 		
 	}
 	
@@ -21,6 +34,8 @@ public class MiniMaxStrategy {
 		if (depth == 0 || node.getState().isGameOver()) {
 			return node;
 		}
+		
+		// TODO - Don't always alternate if the next move is the same player
 		
 		if (max) {
 			
@@ -61,9 +76,12 @@ public class MiniMaxStrategy {
 			
 			Board child = new Board(parent);
 			child.setActivePlayer(player);			
-			child.move(player, i);
 			
-			Node childNode = new Node(node,child, i, heuristicOne(child, player));
+			// Skip empty pits
+			if (child.getPits()[player][i].isEmpty()) continue;
+			
+			child.move(player, i, false);			
+			Node childNode = new Node(node, child, i, heuristicOne(child, player));
 			
 			successors.add(childNode);
 			
