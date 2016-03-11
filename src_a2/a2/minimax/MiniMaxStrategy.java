@@ -15,7 +15,7 @@ public class MiniMaxStrategy {
 	public int miniMax(Board board, int player) {
 		
 		Node rootNode = new Node(null, board);
-		Node lastNode = miniMax(rootNode, MAX_DEPTH, true, player);
+		Node lastNode = miniMax(rootNode, MAX_DEPTH, player);
 		
 		Node currNode = lastNode;
 		while (currNode != null) {
@@ -32,33 +32,22 @@ public class MiniMaxStrategy {
 		
 	}
 	
-	public Node miniMax(Node node, int depth, boolean max, int player) {
+	public Node miniMax(Node node, int depth, int player) {
 		
 		if (depth == 0 || node.getState().isGameOver()) {
 			return node;
 		}
 		
-		// TODO - Don't always alternate if the next move is the same player
+		// Don't always alternate if the next move is the same player
+		boolean max = node.getParent() == null || node.getParent().getState().getActivePlayer() == player;
 		
-		if (max) {
-			
-			Node bestNode = null;
-			for (Node successor : generateSuccessors(node, player)) {
-				Node v = miniMax(successor, depth - 1, false, player ^ 1);
-				bestNode = max(bestNode, v);
-			}			
-			return bestNode;
-			
-		} else {
-			
-			Node bestNode = null;
-			for (Node successor : generateSuccessors(node, player)) {
-				Node v = miniMax(successor, depth - 1, true, player ^ 1);
-				bestNode = min(bestNode, v);
-			}			
-			return bestNode;
-			
+		Node bestNode = null;
+		for (Node successor : generateSuccessors(node, player)) {
+			Node v = miniMax(successor, depth - 1, successor.getState().getActivePlayer());			
+			bestNode = max ? max(bestNode, v) : min(bestNode, v);			
 		}
+		
+		return bestNode;
 		
 	}
 	
@@ -78,14 +67,16 @@ public class MiniMaxStrategy {
 		for (int i=0; i<parent.getSize(); i++) {
 			
 			Board child = new Board(parent);
-			child.setActivePlayer(player);			
 			
 			// Skip empty pits
 			if (child.getPits()[player][i].isEmpty()) continue;
 			
-			child.move(player, i, false);			
-			Node childNode = new Node(node, child, i, heuristic.evaluate(child, player));
+			// Check if the player can move again, and set the player accordingly
+			boolean moveAgain = child.move(player, i, false);			
+			child.setActivePlayer(moveAgain ? player : player ^ 1);
 			
+			// Initialize a child node and add it to the list
+			Node childNode = new Node(node, child, i, heuristic.evaluate(child, player));			
 			successors.add(childNode);
 			
 		}
