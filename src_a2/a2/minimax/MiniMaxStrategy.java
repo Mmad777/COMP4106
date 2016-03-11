@@ -7,15 +7,30 @@ import a2.model.Board;
 
 public class MiniMaxStrategy {
 	
+	private static final boolean USE_AB = true;
 	private static final int MAX_DEPTH = 4;
 
 	private Heuristic heuristic = new Heuristic.MancalaCountHeuristic();
 	//private Heuristic heuristic = new Heuristic.StoneCountHeuristic();
 	
+	private int totalNodeCount = 0;
+	private int nodeCount = 0;
+	
+	public int getTotalNodeCount() {
+		return totalNodeCount;
+	}
+	public int getNodeCount() {
+		return nodeCount;
+	}
+	
 	public int miniMax(Board board, int player) {
 		
-		Node rootNode = new Node(null, board);
-		Node lastNode = miniMax(rootNode, MAX_DEPTH, player);
+		nodeCount = 0;
+		
+		Node rootNode = new Node(null, board);		
+		Node lastNode = USE_AB ? 
+				miniMaxAB(rootNode, -1000000, 1000000, MAX_DEPTH, player) : 
+					miniMax(rootNode, MAX_DEPTH, player);
 		
 		Node currNode = lastNode;
 		while (currNode != null) {
@@ -34,6 +49,9 @@ public class MiniMaxStrategy {
 	
 	public Node miniMax(Node node, int depth, int player) {
 		
+		nodeCount++;
+		totalNodeCount++;
+		
 		if (depth == 0 || node.getState().isGameOver()) {
 			return node;
 		}
@@ -49,6 +67,48 @@ public class MiniMaxStrategy {
 		
 		return bestNode;
 		
+	}
+	
+	public Node miniMaxAB(Node node, int alpha, int beta, int depth, int player) {
+		
+		nodeCount++;
+		totalNodeCount++;
+		
+		if (depth == 0 || node.getState().isGameOver()) {
+			return node;
+		}
+		
+		boolean max = node.getParent() == null || node.getParent().getState().getActivePlayer() == player;		
+
+		Node bestNode = null;
+		for (Node successor : generateSuccessors(node, player)) {
+			
+			Node v = miniMaxAB(successor, alpha, beta, depth - 1, successor.getState().getActivePlayer());		
+			
+			if (max) {
+				bestNode = max(bestNode, v);
+				alpha = max(alpha, bestNode.gethVal());				
+				
+			} else {
+				bestNode = min(bestNode, v);
+				beta = min(beta, bestNode.gethVal());
+				
+			}
+			
+			if (beta <= alpha) break;
+			
+		}
+		
+		return bestNode;
+		
+	}
+
+	private int max(int alpha, int v) {
+		return alpha > v ? alpha : v;
+	}
+	
+	private int min(int beta, int v) {
+		return beta < v ? beta : v;
 	}
 	
 	private Node min(Node bestNode, Node node) {
@@ -84,5 +144,4 @@ public class MiniMaxStrategy {
 		return successors;
 		
 	}
-
 }

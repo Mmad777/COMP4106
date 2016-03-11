@@ -42,6 +42,7 @@ public class MancalaController {
 				selectedPit = view.getPitSelection();
 			} else {
 				selectedPit  = strategy.miniMax(board, activePlayer);
+				System.out.println("Nodes visited: " + strategy.getNodeCount());
 			}
 			
 			view.displayMove(turn++, activePlayer, selectedPit);
@@ -52,6 +53,8 @@ public class MancalaController {
 			}
 			
 		}
+		
+		System.out.println("Total nodes visited: " + strategy.getTotalNodeCount());
 		
 		view.displayGameOver();
 		board.emptyStonesIntoMancalas();
