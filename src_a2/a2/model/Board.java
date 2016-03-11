@@ -108,7 +108,7 @@ public class Board extends Observable {
 		
 		// Allow the player to move again if they selected an empty pit
 		if (pit.isEmpty()) {
-			System.out.println("selected empty pit");
+			System.out.print(" (Selected empty pit!)");
 			return true;
 		}
 

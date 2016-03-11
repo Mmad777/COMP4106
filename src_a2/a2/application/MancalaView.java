@@ -16,13 +16,17 @@ public class MancalaView {
 		this.board = board;		
 		board.addObserver((obj, arg) -> {
 			this.board = (Board) obj;
-			displayBoard();
+			displayBoard(false);
 		});
 		
 	}
 	
-	public void displayBoard() {
+	public void displayBoard(boolean initial) {
 
+		if (initial) {
+			println("Starting game!");
+		}
+		
 		println("");
 		drawTopPlayer();
 		drawBottomPlayer();
@@ -46,8 +50,7 @@ public class MancalaView {
 		
 		BufferedReader br  = new  BufferedReader(new InputStreamReader(System.in));
 		print("Player " + board.getActivePlayer() + ", please enter a pit number (0-5): ");
-		int num = Integer.parseInt(br.readLine());
-		return num;
+		return Integer.parseInt(br.readLine());
 		
 	}
 	
