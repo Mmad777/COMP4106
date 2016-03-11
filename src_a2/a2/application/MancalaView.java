@@ -30,8 +30,8 @@ public class MancalaView {
 		
 	}
 
-	public void displayMove(int activePlayer, int selectedPit) {
-		println("Player " + activePlayer + " selects pit " + selectedPit + ".");
+	public void displayMove(int turn, int activePlayer, int selectedPit) {
+		println("[turn #" + turn + "] Player " + activePlayer + " selects pit " + selectedPit + ".");
 	}
 
 	public void displayWinner(int playerNum) {

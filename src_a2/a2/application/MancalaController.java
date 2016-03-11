@@ -26,11 +26,12 @@ public class MancalaController {
 		MiniMaxStrategy strategy = new MiniMaxStrategy();
 		
 		// Main game loop
+		int turn = 0;
 		while (!board.isGameOver()) {
 			
 			int activePlayer = board.getActivePlayer();
 			int selectedPit  = strategy.miniMax(board, activePlayer);
-			view.displayMove(activePlayer, selectedPit);
+			view.displayMove(turn++, activePlayer, selectedPit);
 
 			// TODO - Only get selection if player vs. computer, and only on player turn (for player vs. computer)
 			//int pitSelection = view.getPitSelection();

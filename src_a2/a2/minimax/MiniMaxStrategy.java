@@ -8,8 +8,9 @@ import a2.model.Board;
 public class MiniMaxStrategy {
 	
 	private static final int MAX_DEPTH = 4;
-	
+
 	private Heuristic heuristic = new Heuristic.MancalaCountHeuristic();
+	//private Heuristic heuristic = new Heuristic.StoneCountHeuristic();
 	
 	public int miniMax(Board board, int player) {
 		
