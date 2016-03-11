@@ -30,8 +30,12 @@ public class MancalaView {
 		
 	}
 
-	public void displayWinner(int determineWinner) {
-		// TODO
+	public void displayWinner(int playerNum) {
+		println("Player " + playerNum + " is the winner!");
+	}
+
+	public void displayGameOver() {
+		println("Game over! Emptying stones into mancalas...");
 	}
 	
 	public int getPitSelection() throws NumberFormatException, IOException {

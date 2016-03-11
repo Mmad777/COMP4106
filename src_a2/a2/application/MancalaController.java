@@ -33,8 +33,6 @@ public class MancalaController {
 			
 			int activePlayer = board.getActivePlayer();
 			int selectedPit  = strategy.miniMax(board, activePlayer);
-			
-			if (selectedPit == -1) break;
 
 			// TODO - Only get selection if player vs. computer, and only on player turn (for player vs. computer)
 			//int pitSelection = view.getPitSelection();
@@ -46,6 +44,7 @@ public class MancalaController {
 			
 		}
 		
+		view.displayGameOver();
 		board.emptyStonesIntoMancalas();
 		view.displayBoard();
 		view.displayWinner(board.determineWinner());

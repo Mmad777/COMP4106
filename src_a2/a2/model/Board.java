@@ -174,17 +174,29 @@ public class Board extends Observable {
 		
 	}
 	
-	public boolean isGameOver() {
-		return Stream.of(pits).flatMap(Stream::of).filter(p -> !p.isEmpty()).count() == 0;
+	public boolean isGameOver() {		
+		return Stream.of(pits[0]).filter(p -> !p.isEmpty()).count() == 0 ||
+				Stream.of(pits[1]).filter(p -> !p.isEmpty()).count() == 0;
 	}
 	
 	public void emptyStonesIntoMancalas() {
-		// TODO
+		
+		// Empty row 0
+		Stream.of(pits[0]).forEach(p -> {
+			mancalas[0].addStones(p.getStones());
+			p.removeAllStones();
+		});
+		
+		// Empty row 1
+		Stream.of(pits[1]).forEach(p -> {
+			mancalas[1].addStones(p.getStones());
+			p.removeAllStones();
+		});
+		
 	}
 
 	public int determineWinner() {
-		// TODO Auto-generated method stub
-		return 0;
+		return (mancalas[0].getStones() > mancalas[1].getStones() ? 0 : 1);				
 	}
 
 }
