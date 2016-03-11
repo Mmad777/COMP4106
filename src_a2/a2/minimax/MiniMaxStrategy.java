@@ -9,6 +9,8 @@ public class MiniMaxStrategy {
 	
 	private static final int MAX_DEPTH = 4;
 	
+	private Heuristic heuristic = new Heuristic.MancalaCountHeuristic();
+	
 	public int miniMax(Board board, int player) {
 		
 		Node rootNode = new Node(null, board);
@@ -81,7 +83,7 @@ public class MiniMaxStrategy {
 			if (child.getPits()[player][i].isEmpty()) continue;
 			
 			child.move(player, i, false);			
-			Node childNode = new Node(node, child, i, heuristicOne(child, player));
+			Node childNode = new Node(node, child, i, heuristic.evaluate(child, player));
 			
 			successors.add(childNode);
 			
@@ -89,10 +91,6 @@ public class MiniMaxStrategy {
 		
 		return successors;
 		
-	}
-	
-	private int heuristicOne(Board board, int player) {
-		return board.getMancalas()[player].getStones();
 	}
 
 }

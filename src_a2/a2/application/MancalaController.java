@@ -6,12 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import a2.minimax.MiniMaxStrategy;
-import a2.minimax.Node;
 import a2.model.Board;
 
 public class MancalaController {
-
-	private final static Logger logger = LoggerFactory.getLogger(MancalaController.class);
 	
 	private Board board;
 	private MancalaView view;
@@ -33,6 +30,7 @@ public class MancalaController {
 			
 			int activePlayer = board.getActivePlayer();
 			int selectedPit  = strategy.miniMax(board, activePlayer);
+			view.displayMove(activePlayer, selectedPit);
 
 			// TODO - Only get selection if player vs. computer, and only on player turn (for player vs. computer)
 			//int pitSelection = view.getPitSelection();

@@ -122,13 +122,18 @@ public class Board extends Observable {
 		while (num != 0) {
 			
 			currPitNum = currPitNum + (1 * direction);
-			
+
+			// If we've reached the end of a row (in either direction)..
 			if (currPitNum < 0 || currPitNum > size - 1) {
 			
+				// Switch the current row between 0 and 1 (top and bottom) and the 
+				// 	direction between 1 and -1 (right and left)
 				int tempRow = currRow;
 				currRow ^= 1;
 				direction *= -1;
 				
+				// Add to the mancala if the stones are on the side 
+				// of the active player
 				if (tempRow == player) {
 					mancalas[player].addStones(1);
 					
@@ -155,6 +160,7 @@ public class Board extends Observable {
 					oppositePit.removeAllStones();
 				}
 				
+				// Add a stone to the pit
 				currPit.addStones(1);
 				
 			}
