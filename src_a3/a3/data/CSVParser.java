@@ -3,6 +3,7 @@ package a3.data;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.opencsv.CSVReader;
@@ -19,40 +20,28 @@ public class CSVParser {
 		List<Animal> result = new ArrayList<Animal>();
 		
 		CSVReader reader = new CSVReader(new FileReader(ZOO_PATH), ',');
-		List<String[]> entries = reader.readAll();
-		entries.forEach(e -> {
-			
-			// TODO - Do this with annotations/more dynamically
-			Animal animal = new Animal();
-			animal.setName(e[0]);
-			animal.setHair(strToBoolean(e[1]));
-			animal.setFeathers(strToBoolean(e[2]));
-			animal.setEggs(strToBoolean(e[3]));
-			animal.setMilk(strToBoolean(e[4]));
-			animal.setAirborne(strToBoolean(e[5]));
-			animal.setAquatic(strToBoolean(e[6]));
-			animal.setPredator(strToBoolean(e[7]));
-			animal.setToothed(strToBoolean(e[8]));
-			animal.setBackbone(strToBoolean(e[9]));
-			animal.setBreathes(strToBoolean(e[10]));
-			animal.setVenomous(strToBoolean(e[11]));
-			animal.setFins(strToBoolean(e[12]));
-			animal.setLegs(Integer.parseInt(e[13]));
-			animal.setTail(strToBoolean(e[14]));
-			animal.setDomestic(strToBoolean(e[15]));
-			animal.setCatsize(strToBoolean(e[16]));
-			animal.setType(Integer.parseInt(e[17]));
-			result.add(animal);
-			
-		});
-	    
+		reader.readAll().forEach(e -> {			
+			Integer[] features = parseIntArray(e, Animal.NON_INT_FEATURE_INDICES);
+			result.add(new Animal(features, features[Animal.TYPE_INDEX - 1] - 1));			// subtract 1 from class to allow it to be indexed from 0
+		});	    
 	    reader.close();
+	    
 	    return result;
 		
 	}
 	
-	private static boolean strToBoolean(String str) {
-		return str.equals("1") ? true : false;
+	private static Integer[] parseIntArray(String[] arr, Integer[] skipIndices) {
+
+		List<Integer> result = new ArrayList<Integer>();
+		
+		List<Integer> skip = Arrays.asList(skipIndices);
+		for (int i=0; i<arr.length; i++) {
+			if (skip.contains(i)) continue;
+			result.add(Integer.parseInt(arr[i]));
+		}
+		
+		return result.toArray(new Integer[arr.length]);
+		
 	}
 
 }
