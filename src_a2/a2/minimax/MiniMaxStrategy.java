@@ -8,10 +8,10 @@ import a2.model.Board;
 public class MiniMaxStrategy {
 	
 	private static final boolean USE_AB = true;
-	private static final int MAX_DEPTH = 4;
+	private static final int MAX_DEPTH = 7;
 
-	private Heuristic heuristic = new Heuristic.MancalaCountHeuristic();
-	//private Heuristic heuristic = new Heuristic.StoneCountHeuristic();
+	private Heuristic heuristic0 = new Heuristic.MancalaCountHeuristic();
+	private Heuristic heuristic1 = new Heuristic.StoneCountHeuristic();
 	
 	private int totalNodeCount = 0;
 	private int nodeCount = 0;
@@ -88,14 +88,14 @@ public class MiniMaxStrategy {
 			if (max) {
 				bestNode = max(bestNode, v);
 				alpha = max(alpha, bestNode.gethVal());				
+				if (beta <= alpha) break;
 				
 			} else {
 				bestNode = min(bestNode, v);
 				beta = min(beta, bestNode.gethVal());
+				if (beta >= alpha) break;
 				
 			}
-			
-			if (beta <= alpha) break;
 			
 		}
 		
@@ -136,8 +136,11 @@ public class MiniMaxStrategy {
 			child.setActivePlayer(moveAgain ? player : player ^ 1);
 			
 			// Initialize a child node and add it to the list
-			Node childNode = new Node(node, child, i, heuristic.evaluate(child, player));			
-			successors.add(childNode);
+			if (player == 0) {
+				successors.add(new Node(node, child, i, heuristic0.evaluate(child, player)));
+			} else {
+				successors.add(new Node(node, child, i, heuristic1.evaluate(child, player)));			
+			}
 			
 		}
 		

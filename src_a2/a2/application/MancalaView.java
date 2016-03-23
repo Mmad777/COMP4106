@@ -1,8 +1,12 @@
 package a2.application;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 import a2.model.Board;
 import a2.model.Pit;
@@ -11,13 +15,55 @@ public class MancalaView {
 	
 	private Board board;
 	
-	public MancalaView(Board board) {
+	private Writer writer;
+	
+	public MancalaView(Board board) {		
 		
 		this.board = board;		
 		board.addObserver((obj, arg) -> {
 			this.board = (Board) obj;
 			displayBoard(false);
 		});
+		
+		try {
+		    writer = new BufferedWriter(new OutputStreamWriter(
+		          new FileOutputStream("C://log.txt"), "utf-8"));
+		    
+		} catch (IOException ex) {
+			println(ex.getMessage());
+		}
+		
+	}
+	
+	public void close() {
+		
+		try {
+			writer.close();
+		} catch (IOException e) {
+			print(e.getMessage());
+		}
+		
+	}
+	
+	
+	public void writeMove(int turn, int activePlayer, int selectedPit, int nodeCount) {
+		
+		try {
+			writer.write("[turn #" + turn + " , player " + activePlayer+ ", pit " + selectedPit + "] nodes visited: " + nodeCount + "\n");
+			
+		} catch (IOException e) {
+			print(e.getMessage());
+		}
+	}
+	
+	public void writeGameOver(int totalNodeCount) {
+		
+		try {
+			writer.write("Total node count: " + totalNodeCount + "\n");
+			
+		} catch (IOException e) {
+			print(e.getMessage());
+		}
 		
 	}
 	
@@ -38,8 +84,8 @@ public class MancalaView {
 		println("[turn #" + turn + "] Player " + activePlayer + " selects pit " + selectedPit + ".");
 	}
 
-	public void displayWinner(int playerNum) {
-		println("Player " + playerNum + " is the winner!");
+	public void displayWinner(int initialPlayer, int winner) {
+		println("Player " + winner + " is the winner! (" + initialPlayer + " played first)");
 	}
 
 	public void displayGameOver() {

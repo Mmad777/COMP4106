@@ -7,8 +7,8 @@ import util.MathUtil;
 
 public class Board extends Observable {
 	
-	private static final int DEFAULT_SIZE 			= 6;
-	private static final int DEFAULT_NUM_STONES 	= 6;
+	public static final int DEFAULT_SIZE 			= 6;
+	public static final int DEFAULT_NUM_STONES 		= 6;
 	private static final int NUM_PLAYERS			= 2;
 	
 	private int size 		= DEFAULT_SIZE;

@@ -22,7 +22,8 @@ public class MancalaController {
 	public MancalaController() throws NumberFormatException, IOException {
 		
 		// Initialize state
-		board = new Board(6, 6);
+		board = new Board(Board.DEFAULT_SIZE, Board.DEFAULT_NUM_STONES);
+		int initialPlayer = board.getActivePlayer();
 		
 		// Create and draw the board, initially
 		view = new MancalaView(board);
@@ -42,7 +43,7 @@ public class MancalaController {
 				selectedPit = view.getPitSelection();
 			} else {
 				selectedPit  = strategy.miniMax(board, activePlayer);
-				System.out.println("Nodes visited: " + strategy.getNodeCount());
+				view.writeMove(turn, activePlayer, selectedPit, strategy.getNodeCount());
 			}
 			
 			view.displayMove(turn++, activePlayer, selectedPit);
@@ -54,12 +55,14 @@ public class MancalaController {
 			
 		}
 		
-		System.out.println("Total nodes visited: " + strategy.getTotalNodeCount());
-		
+		view.writeGameOver(strategy.getTotalNodeCount());
 		view.displayGameOver();
+		
 		board.emptyStonesIntoMancalas();
 		view.displayBoard(false);
-		view.displayWinner(board.determineWinner());
+		view.displayWinner(initialPlayer, board.determineWinner());
+		
+		view.close();
 		
 	}
 
