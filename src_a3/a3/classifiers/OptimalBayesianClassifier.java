@@ -1,8 +1,8 @@
 package a3.classifiers;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import org.apache.commons.math3.stat.correlation.Covariance;
 
@@ -10,33 +10,30 @@ import a3.model.Iris;
 
 public class OptimalBayesianClassifier extends Classifier {
 	
-	public void train(List<Iris> animals) {
+	public  Map<String, ClassParameters> calcParameters(List<Iris> animals) {
+		
+		// Initialize the map to store mean vector/covariance for each class
+		Map<String, ClassParameters> dataParams = new HashMap<String, ClassParameters>();
 		
 		// Partition data into sets for each class
 		Map<String, List<Iris>> classMap = getClassMap(animals);
 		
 		// Do pairwise classification on all the classes
-		String[] classes = classMap.keySet().toArray(new String[classMap.size()]);
-		for (int i=0; i<classes.length; i++) {
-			for (int j=i+1; j<classes.length; j++) {
-				
-				List<Iris> classA = classMap.get(classes[i]);
-				List<Iris> classB = classMap.get(classes[j]);
-				
-				Double[] meanA = calculateSampleMean(classA);
-				Double[] meanB = calculateSampleMean(classB);
-				
-				logMean(classes[i], meanA);
-				logMean(classes[j], meanB);
-				
-				double[][] covarianceA = calcFullCovarianceMatrix(classA);
-				double[][] covarianceB = calcFullCovarianceMatrix(classB);
-				
-				logCovariance(classes[i], covarianceA);
-				logCovariance(classes[j], covarianceB);
-				
+		for (String className : classMap.keySet()) {
+			
+			List<Iris> clazzData = classMap.get(className);
+			double[] mean = calculateSampleMean(clazzData);
+			double[][] covariance = calcFullCovarianceMatrix(clazzData);
+			
+			if (!dataParams.containsKey(className)) {
+				ClassParameters params = new ClassParameters(className, mean, covariance);					
+				dataParams.put(className, params);
+				params.log();
 			}
+			
 		}
+		
+		return dataParams;
 		
 	}
 	

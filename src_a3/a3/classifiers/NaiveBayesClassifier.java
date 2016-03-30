@@ -1,5 +1,6 @@
 package a3.classifiers;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,37 +8,34 @@ import a3.model.Iris;
 
 public class NaiveBayesClassifier extends Classifier {
 	
-	public void train(List<Iris> animals) {
+	public Map<String, ClassParameters> calcParameters(List<Iris> data) {
+		
+		// Initialize the map to store mean vector/covariance for each class
+		Map<String, ClassParameters> statsMap = new HashMap<String, ClassParameters>();
 		
 		// Partition data into sets for each class
-		Map<String, List<Iris>> classMap = getClassMap(animals);
+		Map<String, List<Iris>> classMap = getClassMap(data);
 		
-		// Do pairwise classification on all the classes
-		String[] classes = classMap.keySet().toArray(new String[classMap.size()]);
-		for (int i=0; i<classes.length; i++) {
-			for (int j=i+1; j<classes.length; j++) {
-				
-				List<Iris> classA = classMap.get(classes[i]);
-				List<Iris> classB = classMap.get(classes[j]);
-				
-				Double[] meanA = calculateSampleMean(classA);
-				Double[] meanB = calculateSampleMean(classB);
-				
-				logMean(classes[i], meanA);
-				logMean(classes[j], meanB);
-				
-				double[][] covarianceA = calcDiagonalCovarianceMatrix(classA, meanA);
-				double[][] covarianceB = calcDiagonalCovarianceMatrix(classB, meanB);
-				
-				logCovariance(classes[i], covarianceA);
-				logCovariance(classes[j], covarianceB);
-				
+		// Calculate parameters for each class
+		for (String className : classMap.keySet()) {
+			
+			List<Iris> clazzData = classMap.get(className);
+			double[] mean = calculateSampleMean(clazzData);
+			double[][] covariance = calcDiagonalCovarianceMatrix(clazzData, mean);
+			
+			if (!statsMap.containsKey(className)) {
+				ClassParameters params = new ClassParameters(className, mean, covariance);					
+				statsMap.put(className, params);
+				params.log();
 			}
+			
 		}
+		
+		return statsMap;
 		
 	}
 	
-	private double[][] calcDiagonalCovarianceMatrix(List<Iris> irises, Double[] sampleMean) {
+	private double[][] calcDiagonalCovarianceMatrix(List<Iris> irises, double[] sampleMean) {
 		
 		double[][] result = new double[Iris.NUM_FEATURES][Iris.NUM_FEATURES];
 		for (int i=0; i<result.length; i++) {
