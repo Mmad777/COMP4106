@@ -49,6 +49,15 @@ public abstract class Classifier {
 		
 	}
 	
+	protected double[] calcDelta(double[] x, double[] y) {
+		
+		double[] result = new double[x.length];
+		for (int i=0; i<result.length; i++) {
+			result[i] = x[i] - y[i];
+		}
+		return result;
+	}
+	
 	public class ClassParameters {
 		
 		private String className;

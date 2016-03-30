@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.opencsv.CSVReader;
 
 import a3.model.Iris;
@@ -21,7 +23,7 @@ public class CSVParser {
 		
 		CSVReader reader = new CSVReader(new FileReader(IRIS_PATH), ',');
 		reader.readAll().forEach(e -> {			
-			Double[] features = parseDoubleArray(e, Iris.NON_INT_FEATURE_INDICES);
+			double[] features = parseDoubleArray(e, Iris.NON_INT_FEATURE_INDICES);
 			result.add(new Iris(features, e[Iris.TYPE_INDEX]));			// subtract 1 from class to allow it to be indexed from 0
 		});	    
 	    reader.close();
@@ -30,7 +32,7 @@ public class CSVParser {
 		
 	}
 	
-	private static Double[] parseDoubleArray(String[] arr, Integer[] skipIndices) {
+	private static double[] parseDoubleArray(String[] arr, Integer[] skipIndices) {
 
 		List<Double> result = new ArrayList<Double>();
 		
@@ -40,7 +42,8 @@ public class CSVParser {
 			result.add(Double.parseDouble(arr[i]));
 		}
 		
-		return result.toArray(new Double[result.size()]);
+		Double[] nonPrimArr = result.toArray(new Double[result.size()]);
+		return ArrayUtils.toPrimitive(nonPrimArr);
 		
 	}
 

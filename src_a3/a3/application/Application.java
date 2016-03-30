@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import a3.classifiers.Classifier.ClassParameters;
 import a3.classifiers.OptimalBayesianClassifier;
 import a3.data.CSVParser;
 import a3.data.Partitioner;
@@ -29,9 +28,10 @@ public class Application {
     	// Partition into training/test sets
     	PartitionedData partitionedData = Partitioner.getPartitionedData(10, irisDataClassMap);
     	
-    	// Calculate the parameters for each data class using training data
+    	// Classify test data
     	OptimalBayesianClassifier obClassifier = new OptimalBayesianClassifier();
-    	Map<String, ClassParameters> dataParams = obClassifier.calcParameters(partitionedData.getTrainingData());
+    	obClassifier.classify(partitionedData);
+    	
     	
     }
     
