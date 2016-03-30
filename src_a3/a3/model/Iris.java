@@ -2,7 +2,7 @@ package a3.model;
 
 public class Iris {
 	
-	public static final int NUM_INT_FEATURES = 4;
+	public static final int NUM_FEATURES = 4;
 	public static final Integer[] NON_INT_FEATURE_INDICES = { 4 };
 	public static final int TYPE_INDEX = 4;
 	
