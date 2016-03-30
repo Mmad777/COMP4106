@@ -20,7 +20,8 @@ public class Application {
     public static void main(String[] args) throws InterruptedException, IOException {
 
 //    	List<DataModel> data = CSVParser.parseHeartDataset();
-    	List<DataModel> data = CSVParser.parseIrisDataset();
+    	List<DataModel> data = CSVParser.parseWineDataset();
+//    	List<DataModel> data = CSVParser.parseIrisDataset();
     	
 //    	System.out.println("Naive Bayesian Classifier");
 //    	testClassifier(new NaiveBayesClassifier(), data);

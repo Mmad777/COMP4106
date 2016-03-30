@@ -17,6 +17,7 @@ public class CSVParser {
 	
 	private final static String IRIS_PATH = DATASETS_DIR + "iris.csv";	
 	private final static String HEART_PATH = DATASETS_DIR + "heartDisease.csv";
+	private final static String WINE_PATH = DATASETS_DIR + "wine.csv";
 	
 	public static List<DataModel> parseHeartDataset() throws IOException {
 		
@@ -41,6 +42,21 @@ public class CSVParser {
 		reader.readAll().forEach(e -> {			
 			double[] features = parseDoubleArray(e, 4);
 			result.add(new DataModel(features, e[4]));			
+		});	    
+	    reader.close();
+	    
+	    return result;
+		
+	}
+	
+	public static List<DataModel> parseWineDataset() throws IOException {
+		
+		List<DataModel> result = new ArrayList<DataModel>();
+		
+		CSVReader reader = new CSVReader(new FileReader(WINE_PATH), ',');
+		reader.readAll().forEach(e -> {			
+			double[] features = parseDoubleArray(e, 13);
+			result.add(new DataModel(features, e[13]));			
 		});	    
 	    reader.close();
 	    
