@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.math3.linear.LUDecomposition;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.stat.correlation.Covariance;
 
 import a3.model.DataModel;
@@ -30,6 +33,41 @@ public abstract class Classifier {
 		}
 		
 		return classMap;		
+		
+	}
+	
+	protected double calcMahalanobisDist(DataModel data, ClassParameters params) {
+		
+		// Calculate the delta between dimensions and mean
+		double[] delta = calcDelta(data.getDimensions(), params.getMeanVector());
+		
+		// Inverse the covariance matrix
+		RealMatrix m = MatrixUtils.createRealMatrix(params.getCovarianceMatrix());
+		double[][] mCovInv = new LUDecomposition(m).getSolver().getInverse().getData();
+		
+		// Transpose delta (turns into a 2D array)
+		double[][] tmDelta = transposeDelta(delta);
+		
+		// Convert delta to 1x4 matrix
+		double[][] mDelta = { delta };
+		
+		// Do some matrix mult to get the distance
+		RealMatrix m1 = MatrixUtils.createRealMatrix(tmDelta);
+		RealMatrix m2 = MatrixUtils.createRealMatrix(mCovInv);
+		RealMatrix m3 = MatrixUtils.createRealMatrix(mDelta);
+		RealMatrix distMatrix = (m3.multiply(m2)).multiply(m1);
+		return distMatrix.getData()[0][0];
+		
+	}
+
+	private double[][] transposeDelta(double[] delta) {
+		
+		double[][] result = new double[delta.length][1];
+		for (int i=0; i<result.length; i++) {
+			result[i][0] = delta[i];
+		}
+		
+		return result;
 		
 	}
 	

@@ -15,11 +15,11 @@ public class Application {
 	
     public static void main(String[] args) throws InterruptedException, IOException {
 
-//    	System.out.println("\nNaive Bayesian Classifier");
-//    	testNaiveBayesianClassifier();
+    	System.out.println("\nNaive Bayesian Classifier");
+    	testNaiveBayesianClassifier();
     	
-    	System.out.println("\nOptimal Bayesian Classifier");
-    	testOptimalBayesianClassifier();
+//    	System.out.println("\nOptimal Bayesian Classifier");
+//    	testOptimalBayesianClassifier();
         
     }
     
@@ -35,25 +35,48 @@ public class Application {
     	
     	// Classify test data
     	NaiveBayesClassifier nbClassifier = new NaiveBayesClassifier();
-    	nbClassifier.classify(partitionedData);
+    	Map<String, List<DataModel>> classified = nbClassifier.classify(partitionedData);
+    	
+    	verifyClassification(classified);
 		
 	}
 
 	private static void testOptimalBayesianClassifier() throws IOException {
     	
-    	List<DataModel> irisData = CSVParser.parseIrisDataset();
+//    	List<DataModel> data = CSVParser.parseIrisDataset();
+    	List<DataModel> data = CSVParser.parseHeartDataset();
     	
     	// Split it into classes
-    	Map<String, List<DataModel>> irisDataClassMap = Partitioner.getClassMap(irisData);
+    	Map<String, List<DataModel>> irisDataClassMap = Partitioner.getClassMap(data);
     	
     	// Partition into training/test sets
     	PartitionedData partitionedData = Partitioner.getPartitionedData(10, irisDataClassMap);
     	
     	// Classify test data
     	OptimalBayesianClassifier obClassifier = new OptimalBayesianClassifier();
-    	obClassifier.classify(partitionedData);
+    	Map<String, List<DataModel>> classified = obClassifier.classify(partitionedData);
     	
+    	verifyClassification(classified);
     	
     }
+	
+	private static void verifyClassification(Map<String, List<DataModel>> classified) {
+    	
+    	// Verify correct classifications
+    	for (String className : classified.keySet()) {
+    		
+    		for (DataModel dataModel : classified.get(className)) {
+    			
+    			if (dataModel.getClassName().equals(className)) {
+    				System.out.println("Correct classification!");
+    			} else {
+    				System.out.println("Incorrect classification!");
+    			}
+    			
+    		}
+    		
+    	}
+		
+	}
     
 }

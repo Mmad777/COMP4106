@@ -5,10 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.math3.linear.LUDecomposition;
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
-
 import a3.data.Partitioner.PartitionedData;
 import a3.model.DataModel;
 
@@ -17,7 +13,7 @@ public class NaiveBayesClassifier extends Classifier {
 	public Map<String, List<DataModel>> classify(PartitionedData partitionedData) {
 		
 		// Calculate parameters
-    	Map<String, ClassParameters> classParamMap = calcParameters(partitionedData.getTrainingData());
+    	Map<String, ClassParameters> paramMap = calcParameters(partitionedData.getTrainingData());
 		
 		// Initialize the result map
 		Map<String, List<DataModel>> result = new HashMap<String, List<DataModel>>();
@@ -28,27 +24,16 @@ public class NaiveBayesClassifier extends Classifier {
 			String bestClass = null;
 			double minDist = Double.MAX_VALUE;
 			
-			classParamMap.keySet().forEach(c -> {
+			for (String className : paramMap.keySet()) {
 				
-				ClassParameters params = classParamMap.get(c);
+				ClassParameters params = paramMap.get(className);
+				double distance = calcMahalanobisDist(data, params);		
+				if (distance < minDist) {
+					minDist = distance;
+					bestClass = className;
+				}
 				
-				// Calculate the delta between dimensions and mean
-				double[] delta = calcDelta(data.getDimensions(), params.getMeanVector());
-				
-				// Inverse the covariance matrix
-				RealMatrix m = MatrixUtils.createRealMatrix(params.getCovarianceMatrix());
-				RealMatrix mInv = new LUDecomposition(m).getSolver().getInverse();
-				double[][] inv = mInv.getData();
-				
-				// Transpose delta (turns into a 2D array)
-//				double[][] tDelta = transposeDelta(delta);
-//				
-//				// TODO - Calculate the Mahalanobis distance
-//				double[][] dotDeltaInv = dot(tDelta, inv);
-				
-				// TODO - If d < minDist, set minDist and bestClass
-				
-			});
+			}
 			
 			if (!result.containsKey(bestClass)) {
 				result.put(bestClass, new ArrayList<DataModel>());

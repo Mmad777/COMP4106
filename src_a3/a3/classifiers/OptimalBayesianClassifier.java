@@ -5,10 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.math3.linear.LUDecomposition;
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
-
 import a3.data.Partitioner.PartitionedData;
 import a3.model.DataModel;
 
@@ -31,33 +27,11 @@ public class OptimalBayesianClassifier extends Classifier {
 			for (String className : paramMap.keySet()) {
 				
 				ClassParameters params = paramMap.get(className);
-				
-				// Calculate the delta between dimensions and mean
-				double[] delta = calcDelta(data.getDimensions(), params.getMeanVector());
-				
-				// Inverse the covariance matrix
-				RealMatrix m = MatrixUtils.createRealMatrix(params.getCovarianceMatrix());
-				double[][] mCovInv = new LUDecomposition(m).getSolver().getInverse().getData();
-				
-				// Transpose delta (turns into a 2D array)
-				double[][] tmDelta = transposeDelta(delta);
-				
-				// Convert delta to 1x4 matrix
-				double[][] mDelta = { delta };
-				
-				// TODO - Calculate the Mahalanobis distance
-				RealMatrix m1 = MatrixUtils.createRealMatrix(tmDelta);
-				RealMatrix m2 = MatrixUtils.createRealMatrix(mCovInv);
-				RealMatrix m3 = MatrixUtils.createRealMatrix(mDelta);
-				RealMatrix test = m1.multiply(m2);
-				RealMatrix test2 = m3.multiply(test);
-				
-				// TODO - If d < minDist, set minDist and bestClass
-//				double d = 0;
-//				if (d < minDist) {
-//					minDist = d;
-//					bestClass = className;
-//				}
+				double distance = calcMahalanobisDist(data, params);		
+				if (distance < minDist) {
+					minDist = distance;
+					bestClass = className;
+				}
 				
 			}
 			
@@ -97,20 +71,6 @@ public class OptimalBayesianClassifier extends Classifier {
 		}
 		
 		return dataParams;
-		
-	}
-
-	private double[][] transposeDelta(double[] delta) {
-		
-		double[][] mDelta = new double[delta.length][delta.length];
-		mDelta[0] = delta;
-		for (int row=1; row<mDelta.length; row++) {
-			for (int col=0; col<mDelta[row].length; col++){
-				mDelta[row][col] = 0;
-			}
-		}
-		RealMatrix rmDelta = MatrixUtils.createRealMatrix(mDelta);
-		return rmDelta.transpose().getData();
 		
 	}
 
