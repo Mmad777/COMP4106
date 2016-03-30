@@ -8,21 +8,21 @@ import java.util.List;
 
 import com.opencsv.CSVReader;
 
-import a3.model.Animal;
+import a3.model.Iris;
 
 public class CSVParser {
 	
 	private final static String DATASETS_DIR = "datasets/";
-	private final static String ZOO_PATH = DATASETS_DIR + "zoo.csv";
+	private final static String IRIS_PATH = DATASETS_DIR + "iris.csv";
 	
-	public static List<Animal> parseZooDataset() throws IOException {
+	public static List<Iris> parseIrisDataset() throws IOException {
 		
-		List<Animal> result = new ArrayList<Animal>();
+		List<Iris> result = new ArrayList<Iris>();
 		
-		CSVReader reader = new CSVReader(new FileReader(ZOO_PATH), ',');
+		CSVReader reader = new CSVReader(new FileReader(IRIS_PATH), ',');
 		reader.readAll().forEach(e -> {			
-			Integer[] features = parseIntArray(e, Animal.NON_INT_FEATURE_INDICES);
-			result.add(new Animal(features, features[Animal.TYPE_INDEX - 1] - 1));			// subtract 1 from class to allow it to be indexed from 0
+			Double[] features = parseDoubleArray(e, Iris.NON_INT_FEATURE_INDICES);
+			result.add(new Iris(features, e[Iris.TYPE_INDEX]));			// subtract 1 from class to allow it to be indexed from 0
 		});	    
 	    reader.close();
 	    
@@ -30,17 +30,17 @@ public class CSVParser {
 		
 	}
 	
-	private static Integer[] parseIntArray(String[] arr, Integer[] skipIndices) {
+	private static Double[] parseDoubleArray(String[] arr, Integer[] skipIndices) {
 
-		List<Integer> result = new ArrayList<Integer>();
+		List<Double> result = new ArrayList<Double>();
 		
 		List<Integer> skip = Arrays.asList(skipIndices);
 		for (int i=0; i<arr.length; i++) {
 			if (skip.contains(i)) continue;
-			result.add(Integer.parseInt(arr[i]));
+			result.add(Double.parseDouble(arr[i]));
 		}
 		
-		return result.toArray(new Integer[arr.length]);
+		return result.toArray(new Double[result.size()]);
 		
 	}
 

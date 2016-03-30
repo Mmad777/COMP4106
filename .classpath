@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="C:/Users/COLIN/git/slf4j-1.7.15/slf4j-simple-1.7.15.jar"/>
 	<classpathentry kind="lib" path="C:/Users/COLIN/Google Drive/school/4B - winter 2015/comp4106/assignments/a3/lib/opencsv-3.7.jar"/>
 	<classpathentry kind="lib" path="C:/Users/COLIN/Google Drive/school/4B - winter 2015/comp4106/assignments/a3/lib/commons-lang3-3.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/COLIN/Google Drive/school/4B - winter 2015/comp4106/assignments/a3/lib/commons-math3-3.6.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

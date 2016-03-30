@@ -4,46 +4,77 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
-import a3.model.Animal;
+import a3.model.Iris;
 
 public class NaiveBayesClassifier {
 	
-	public void train(List<Animal> animals) {
+	public void train(List<Iris> animals) {
 		
 		// Partition data into sets for each class
-		Map<Integer, List<Animal>> classMap = getClassMap(animals);
+		Map<String, List<Iris>> classMap = getClassMap(animals);
 		
 		// Do pairwise classification on all the classes
-		Integer[] classes = classMap.keySet().toArray(new Integer[classMap.size()]);
+		String[] classes = classMap.keySet().toArray(new String[classMap.size()]);
 		for (int i=0; i<classes.length; i++) {
 			for (int j=i+1; j<classes.length; j++) {
 				
-				List<Animal> classA = classMap.get(i);
-				List<Animal> classB = classMap.get(j);
+				List<Iris> classA = classMap.get(classes[i]);
+				List<Iris> classB = classMap.get(classes[j]);
 				
 				Integer[] meanA = calculateSampleMean(classA);
 				Integer[] meanB = calculateSampleMean(classB);
 				
+				logMean("A" + i, meanA);
+				logMean("B" + j, meanB);
+				
 				Integer[][] covarianceA = calculateSampleVariance(classA, meanA);
 				Integer[][] covarianceB = calculateSampleVariance(classB, meanB);
+				
+				logCovariance("A" + i, covarianceA);
+				logCovariance("B" + j, covarianceB);
 				
 			}
 		}
 		
 	}
 	
-	private Integer[] calculateSampleMean(List<Animal> animals) {
+	private void logMean(String className, Integer[] arr) {
 		
-		Integer[] result = new Integer[Animal.NUM_INT_FEATURES];
+		System.out.print("Mean of " + className + ": [");
+		Stream.of(arr).forEach(i -> {
+			System.out.print(i + " ");
+		});
+		System.out.println("]");
+	
+	}
+	
+	private void logCovariance(String className, Integer[][] matrix) {
+		
+		System.out.println("Covariance of " + className + ": \n{");
+		Stream.of(matrix).forEach(r -> {
+			System.out.print("\t[");
+			Stream.of(r).forEach(c -> {
+				System.out.print(c == null ? " " : c + " ");
+			});
+			System.out.println("\t]");
+		});
+		System.out.println("}");
+	
+	}
+	
+	private Integer[] calculateSampleMean(List<Iris> irises) {
+		
+		Integer[] result = new Integer[Iris.NUM_INT_FEATURES];
 		for (int i=0; i<result.length; i++) {
 			
 			int sum = 0;
-			for (Animal a : animals) {
+			for (Iris a : irises) {
 				sum += a.getFeatures()[i];
 			}
 			
-			result[i] = sum / animals.size();
+			result[i] = sum / irises.size();
 			
 		}
 		
@@ -51,17 +82,17 @@ public class NaiveBayesClassifier {
 		
 	}
 	
-	private Integer[][] calculateSampleVariance(List<Animal> animals, Integer[] sampleMean) {
+	private Integer[][] calculateSampleVariance(List<Iris> irises, Integer[] sampleMean) {
 		
-		Integer[][] result = new Integer[Animal.NUM_INT_FEATURES][Animal.NUM_INT_FEATURES];
+		Integer[][] result = new Integer[Iris.NUM_INT_FEATURES][Iris.NUM_INT_FEATURES];
 		for (int i=0; i<result.length; i++) {
 			
 			int sum = 0;
-			for (Animal a : animals) {
-				sum += a.getFeatures()[i] - sampleMean[i];
+			for (Iris a : irises) {
+				sum += Math.pow(a.getFeatures()[i] - sampleMean[i], 2);
 			}
 			
-			result[i][i] = sum / animals.size();
+			result[i][i] = (int) Math.pow(sum / irises.size(), 2);
 			
 		}
 		
@@ -69,14 +100,14 @@ public class NaiveBayesClassifier {
 		
 	}
 	
-	private Map<Integer, List<Animal>> getClassMap(List<Animal> animals) {
+	private Map<String, List<Iris>> getClassMap(List<Iris> animals) {
 		
-		Map<Integer, List<Animal>> classMap = new HashMap<Integer, List<Animal>>();
-		for (Animal a : animals) {
+		Map<String, List<Iris>> classMap = new HashMap<String, List<Iris>>();
+		for (Iris a : animals) {
 			
-			int dataClass = a.getDataClass();
+			String dataClass = a.getDataClass();
 			if (!classMap.containsKey(dataClass)) {
-				classMap.put(dataClass, new ArrayList<Animal>());
+				classMap.put(dataClass, new ArrayList<Iris>());
 			}
 			
 			classMap.get(dataClass).add(a);
