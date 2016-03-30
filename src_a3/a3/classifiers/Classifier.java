@@ -14,7 +14,7 @@ import org.apache.commons.math3.stat.correlation.Covariance;
 
 import a3.model.DataModel;
 
-public abstract class Classifier {
+public abstract class Classifier implements IClassifier {
 
 	protected final static int NUM_DEC_DIGITS = 12;
 	

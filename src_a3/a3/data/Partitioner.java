@@ -27,7 +27,7 @@ public class Partitioner {
 		
 	}
 	
-	public static PartitionedData getPartitionedData(int kFold, Map<String, List<DataModel>> classMap) {
+	public static PartitionedData getPartitionedData(int testGroup, int kFold, Map<String, List<DataModel>> classMap) {
 		
 		List<DataModel> trainingData = new ArrayList<DataModel>();
 		List<DataModel> testData = new ArrayList<DataModel>();
@@ -35,13 +35,33 @@ public class Partitioner {
 		classMap.keySet().forEach(c -> {
 			
 			List<DataModel> data = classMap.get(c);
-			int numTraining = (data.size() / kFold) * (kFold - 1);
-			trainingData.addAll(data.subList(0, numTraining));					
-			testData.addAll(data.subList(numTraining, data.size()));
+			
+			int groupSize = (data.size() / kFold);
+			List<List<DataModel>> splitData = splitArray(data, groupSize);			
+			for (int i=0; i<splitData.size(); i++) {
+				
+				if (i == testGroup) {
+					testData.addAll(splitData.get(i));
+				} else {
+					trainingData.addAll(splitData.get(i));
+				}
+				
+			}	
 			
 		});
 		
 		return new PartitionedData(trainingData, testData);
+		
+	}
+	
+	private static List<List<DataModel>> splitArray(List<DataModel> arr, int size) {
+
+		List<List<DataModel>> groups = new ArrayList<List<DataModel>>();
+		for (int i = 0; i < arr.size(); i += size) {
+			groups.add(arr.subList(i,
+		            Math.min(i + size, arr.size())));
+		}
+		return groups;
 		
 	}
 	
