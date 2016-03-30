@@ -2,10 +2,13 @@ package a3.classifiers;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
+
+import org.apache.commons.math3.stat.correlation.Covariance;
 
 import a3.model.Iris;
 
-public class NaiveBayesClassifier extends Classifier {
+public class OptimalBayesianClassifier extends Classifier {
 	
 	public void train(List<Iris> animals) {
 		
@@ -26,8 +29,8 @@ public class NaiveBayesClassifier extends Classifier {
 				logMean(classes[i], meanA);
 				logMean(classes[j], meanB);
 				
-				double[][] covarianceA = calcDiagonalCovarianceMatrix(classA, meanA);
-				double[][] covarianceB = calcDiagonalCovarianceMatrix(classB, meanB);
+				double[][] covarianceA = calcFullCovarianceMatrix(classA);
+				double[][] covarianceB = calcFullCovarianceMatrix(classB);
 				
 				logCovariance(classes[i], covarianceA);
 				logCovariance(classes[j], covarianceB);
@@ -37,21 +40,19 @@ public class NaiveBayesClassifier extends Classifier {
 		
 	}
 	
-	private double[][] calcDiagonalCovarianceMatrix(List<Iris> irises, Double[] sampleMean) {
+	private double[][] calcFullCovarianceMatrix(List<Iris> irises) {
 		
-		double[][] result = new double[Iris.NUM_FEATURES][Iris.NUM_FEATURES];
-		for (int i=0; i<result.length; i++) {
-			
-			double sum = 0;
-			for (Iris a : irises) {
-				sum += Math.pow(a.getFeatures()[i] - sampleMean[i], 2);
+		double[][] data = new double[irises.size()][Iris.NUM_FEATURES];
+		
+		for (int i=0; i<data.length; i++) {
+			for (int j=0; j<data[i].length; j++) {
+				data[i][j] = irises.get(i).getFeatures()[j];
 			}
-			
-			result[i][i] = Math.pow(sum / irises.size(), 2);
-			
 		}
 		
-		return result;
+		Covariance cov = new Covariance(data);
+		return cov.getCovarianceMatrix().getData();
+		
 		
 	}
 
