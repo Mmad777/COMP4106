@@ -10,20 +10,20 @@ import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 
 import a3.data.Partitioner.PartitionedData;
-import a3.model.Iris;
+import a3.model.DataModel;
 
 public class NaiveBayesClassifier extends Classifier {
 	
-	public Map<String, List<Iris>> classify(PartitionedData partitionedData) {
+	public Map<String, List<DataModel>> classify(PartitionedData partitionedData) {
 		
 		// Calculate parameters
     	Map<String, ClassParameters> classParamMap = calcParameters(partitionedData.getTrainingData());
 		
 		// Initialize the result map
-		Map<String, List<Iris>> result = new HashMap<String, List<Iris>>();
+		Map<String, List<DataModel>> result = new HashMap<String, List<DataModel>>();
 		
 		// Classify test data
-		partitionedData.getTestData().forEach(iris -> {
+		partitionedData.getTestData().forEach(data -> {
 			
 			String bestClass = null;
 			double minDist = Double.MAX_VALUE;
@@ -33,7 +33,7 @@ public class NaiveBayesClassifier extends Classifier {
 				ClassParameters params = classParamMap.get(c);
 				
 				// Calculate the delta between dimensions and mean
-				double[] delta = calcDelta(iris.getFeatures(), params.getMeanVector());
+				double[] delta = calcDelta(data.getDimensions(), params.getMeanVector());
 				
 				// Inverse the covariance matrix
 				RealMatrix m = MatrixUtils.createRealMatrix(params.getCovarianceMatrix());
@@ -51,10 +51,10 @@ public class NaiveBayesClassifier extends Classifier {
 			});
 			
 			if (!result.containsKey(bestClass)) {
-				result.put(bestClass, new ArrayList<Iris>());
+				result.put(bestClass, new ArrayList<DataModel>());
 			}
 			
-			result.get(bestClass).add(iris);
+			result.get(bestClass).add(data);
 			
 		});
 		
@@ -62,20 +62,20 @@ public class NaiveBayesClassifier extends Classifier {
 		
 	}
 	
-	private Map<String, ClassParameters> calcParameters(List<Iris> data) {
+	private Map<String, ClassParameters> calcParameters(List<DataModel> data) {
 		
 		// Initialize the map to store mean vector/covariance for each class
 		Map<String, ClassParameters> statsMap = new HashMap<String, ClassParameters>();
 		
 		// Partition data into sets for each class
-		Map<String, List<Iris>> classMap = getClassMap(data);
+		Map<String, List<DataModel>> classMap = getClassMap(data);
 		
 		// Calculate parameters for each class
 		for (String className : classMap.keySet()) {
 			
-			List<Iris> clazzData = classMap.get(className);
+			List<DataModel> clazzData = classMap.get(className);
 			double[] mean = calculateSampleMean(clazzData);
-			double[][] covariance = calcDiagonalCovarianceMatrix(clazzData, mean);
+			double[][] covariance = calcDiagonalCovarianceMatrix(clazzData);
 			
 			if (!statsMap.containsKey(className)) {
 				ClassParameters params = new ClassParameters(className, mean, covariance);					
@@ -89,21 +89,17 @@ public class NaiveBayesClassifier extends Classifier {
 		
 	}
 	
-	private double[][] calcDiagonalCovarianceMatrix(List<Iris> irises, double[] sampleMean) {
+	private double[][] calcDiagonalCovarianceMatrix(List<DataModel> data) {
 		
-		double[][] result = new double[Iris.NUM_FEATURES][Iris.NUM_FEATURES];
-		for (int i=0; i<result.length; i++) {
-			
-			double sum = 0;
-			for (Iris a : irises) {
-				sum += Math.pow(a.getFeatures()[i] - sampleMean[i], 2);
+		double[][] matrix = calcFullCovarianceMatrix(data);
+		
+		for (int r=0; r<matrix.length; r++) {
+			for (int c=0; c<matrix.length; c++) {
+				if (r != c) matrix[r][c] = 0;
 			}
-			
-			result[i][i] = Math.pow(sum / irises.size(), 2);
-			
 		}
 		
-		return result;
+		return matrix;
 		
 	}
 

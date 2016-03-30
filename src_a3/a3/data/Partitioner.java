@@ -5,18 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import a3.model.Iris;
+import a3.model.DataModel;
 
 public class Partitioner {
 	
-	public static Map<String, List<Iris>> getClassMap(List<Iris> data) {
+	public static Map<String, List<DataModel>> getClassMap(List<DataModel> data) {
 		
-		Map<String, List<Iris>> classMap = new HashMap<String, List<Iris>>();
-		for (Iris a : data) {
+		Map<String, List<DataModel>> classMap = new HashMap<String, List<DataModel>>();
+		for (DataModel a : data) {
 			
-			String dataClass = a.getDataClass();
+			String dataClass = a.getClassName();
 			if (!classMap.containsKey(dataClass)) {
-				classMap.put(dataClass, new ArrayList<Iris>());
+				classMap.put(dataClass, new ArrayList<DataModel>());
 			}
 			
 			classMap.get(dataClass).add(a);
@@ -27,14 +27,14 @@ public class Partitioner {
 		
 	}
 	
-	public static PartitionedData getPartitionedData(int kFold, Map<String, List<Iris>> classMap) {
+	public static PartitionedData getPartitionedData(int kFold, Map<String, List<DataModel>> classMap) {
 		
-		List<Iris> trainingData = new ArrayList<Iris>();
-		List<Iris> testData = new ArrayList<Iris>();
+		List<DataModel> trainingData = new ArrayList<DataModel>();
+		List<DataModel> testData = new ArrayList<DataModel>();
 		
 		classMap.keySet().forEach(c -> {
 			
-			List<Iris> data = classMap.get(c);
+			List<DataModel> data = classMap.get(c);
 			int numTraining = (data.size() / kFold) * (kFold - 1);
 			trainingData.addAll(data.subList(0, numTraining));					
 			testData.addAll(data.subList(numTraining, data.size()));
@@ -47,18 +47,18 @@ public class Partitioner {
 	
 	public static class PartitionedData {
 		
-		private List<Iris> trainingData;
-		private List<Iris> testData;
+		private List<DataModel> trainingData;
+		private List<DataModel> testData;
 		
-		public PartitionedData(List<Iris> trainingData, List<Iris> testData) {
+		public PartitionedData(List<DataModel> trainingData, List<DataModel> testData) {
 			this.trainingData = trainingData;
 			this.testData = testData;			
 		}
 
-		public List<Iris> getTrainingData() {
+		public List<DataModel> getTrainingData() {
 			return trainingData;
 		}
-		public List<Iris> getTestData() {
+		public List<DataModel> getTestData() {
 			return testData;
 		}
 		

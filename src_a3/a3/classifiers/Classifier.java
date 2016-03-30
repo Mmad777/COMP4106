@@ -7,20 +7,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import a3.model.Iris;
+import org.apache.commons.math3.stat.correlation.Covariance;
+
+import a3.model.DataModel;
 
 public abstract class Classifier {
 
 	protected final static int NUM_DEC_DIGITS = 12;
 	
-	protected Map<String, List<Iris>> getClassMap(List<Iris> irisMap) {
+	protected Map<String, List<DataModel>> getClassMap(List<DataModel> dataMap) {
 		
-		Map<String, List<Iris>> classMap = new HashMap<String, List<Iris>>();
-		for (Iris a : irisMap) {
+		Map<String, List<DataModel>> classMap = new HashMap<String, List<DataModel>>();
+		for (DataModel a : dataMap) {
 			
-			String dataClass = a.getDataClass();
+			String dataClass = a.getClassName();
 			if (!classMap.containsKey(dataClass)) {
-				classMap.put(dataClass, new ArrayList<Iris>());
+				classMap.put(dataClass, new ArrayList<DataModel>());
 			}
 			
 			classMap.get(dataClass).add(a);
@@ -31,17 +33,39 @@ public abstract class Classifier {
 		
 	}
 	
-	protected double[] calculateSampleMean(List<Iris> irises) {
+	protected double[][] calcFullCovarianceMatrix(List<DataModel> data) {
+
+		// TODO - this is bad
+		int dimensions = data.get(0).getNumDimensions();
 		
-		double[] result = new double[Iris.NUM_FEATURES];
+		double[][] dataArr = new double[data.size()][dimensions];
+		
+		for (int i=0; i<dataArr.length; i++) {
+			for (int j=0; j<dataArr[i].length; j++) {
+				dataArr[i][j] = data.get(i).getDimensions()[j];
+			}
+		}
+		
+		Covariance cov = new Covariance(dataArr);
+		return cov.getCovarianceMatrix().getData();
+		
+		
+	}
+	
+	protected double[] calculateSampleMean(List<DataModel> data) {
+		
+		// TODO - this is bad
+		int dimensions = data.get(0).getNumDimensions();
+		
+		double[] result = new double[dimensions];
 		for (int i=0; i<result.length; i++) {
 			
 			double sum = 0;
-			for (Iris a : irises) {
-				sum += a.getFeatures()[i];
+			for (DataModel a : data) {
+				sum += a.getDimensions()[i];
 			}
 			
-			result[i] = sum / irises.size();
+			result[i] = sum / data.size();
 			
 		}
 		

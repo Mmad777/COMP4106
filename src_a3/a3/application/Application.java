@@ -9,14 +9,14 @@ import a3.classifiers.OptimalBayesianClassifier;
 import a3.data.CSVParser;
 import a3.data.Partitioner;
 import a3.data.Partitioner.PartitionedData;
-import a3.model.Iris;
+import a3.model.DataModel;
 
 public class Application {
 	
     public static void main(String[] args) throws InterruptedException, IOException {
 
-    	System.out.println("\nNaive Bayesian Classifier");
-    	testNaiveBayesianClassifier();
+//    	System.out.println("\nNaive Bayesian Classifier");
+//    	testNaiveBayesianClassifier();
     	
     	System.out.println("\nOptimal Bayesian Classifier");
     	testOptimalBayesianClassifier();
@@ -25,10 +25,10 @@ public class Application {
     
     private static void testNaiveBayesianClassifier() throws IOException {
     	
-    	List<Iris> irisData = CSVParser.parseIrisDataset();
+    	List<DataModel> irisData = CSVParser.parseIrisDataset();
     	
     	// Split it into classes
-    	Map<String, List<Iris>> irisDataClassMap = Partitioner.getClassMap(irisData);
+    	Map<String, List<DataModel>> irisDataClassMap = Partitioner.getClassMap(irisData);
     	
     	// Partition into training/test sets
     	PartitionedData partitionedData = Partitioner.getPartitionedData(10, irisDataClassMap);
@@ -41,10 +41,10 @@ public class Application {
 
 	private static void testOptimalBayesianClassifier() throws IOException {
     	
-    	List<Iris> irisData = CSVParser.parseIrisDataset();
+    	List<DataModel> irisData = CSVParser.parseIrisDataset();
     	
     	// Split it into classes
-    	Map<String, List<Iris>> irisDataClassMap = Partitioner.getClassMap(irisData);
+    	Map<String, List<DataModel>> irisDataClassMap = Partitioner.getClassMap(irisData);
     	
     	// Partition into training/test sets
     	PartitionedData partitionedData = Partitioner.getPartitionedData(10, irisDataClassMap);
