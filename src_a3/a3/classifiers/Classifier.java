@@ -16,7 +16,9 @@ import a3.model.DataModel;
 
 public abstract class Classifier implements IClassifier {
 
-	protected final static int NUM_DEC_DIGITS = 12;
+	protected final static int NUM_DEC_DIGITS 	= 12;
+	private final static boolean LOG 			= false;
+	
 	
 	protected Map<String, List<DataModel>> getClassMap(List<DataModel> dataMap) {
 		
@@ -167,8 +169,10 @@ public abstract class Classifier implements IClassifier {
 		
 		public void log() {
 			
-			logMean();
-			logCovariance();
+			if (LOG) {
+				logMean();
+				logCovariance();
+			}
 			
 		}
 		

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import a3.classifiers.ClassificationResults;
 import a3.classifiers.IClassifier;
 import a3.classifiers.LinearClassifier;
 import a3.classifiers.NaiveBayesClassifier;
@@ -48,6 +49,7 @@ public class Application {
     
     private static void leaveOneOutClassification(IClassifier classifier, List<DataModel> data) {
 
+		int totalCorrect = 0, totalIncorrect = 0;
     	for (int i=0; i<data.size(); i++) {
     		
     		System.out.println("Leave-one-out iteration = " + i);
@@ -57,17 +59,23 @@ public class Application {
         	
         	// Classify test data
         	Map<String, List<DataModel>> classified = classifier.classify(partitionedData);
-        	
+
         	// Verify whether classifications were correct or incorrect
-        	verifyClassification(classified);
+        	ClassificationResults results = verifyClassification(classified);
+        	
+        	// Sum the correct/incorrect
+        	totalCorrect += results.getNumCorrect();
+        	totalIncorrect += results.getNumIncorrect();
     		
     	}
+    	
+    	logResults(totalCorrect, totalIncorrect, data.size());
     	
     }
 	
 	private static void kFoldClassification(IClassifier classifier, Map<String, List<DataModel>> dataClassMap) {
     	
-    	// 10-fold cross-validation
+		int totalCorrect = 0, totalIncorrect = 0;
     	for (int i=0; i<K_FOLD; i++) {
     		
     		System.out.println("K-fold iteration = " + i);
@@ -79,13 +87,19 @@ public class Application {
         	Map<String, List<DataModel>> classified = classifier.classify(partitionedData);
         	
         	// Verify whether classifications were correct or incorrect
-        	verifyClassification(classified);
+        	ClassificationResults results = verifyClassification(classified);
+        	
+        	// Sum the correct/incorrect
+        	totalCorrect += results.getNumCorrect();
+        	totalIncorrect += results.getNumIncorrect();
     		
     	}
+    	
+    	logResults(totalCorrect, totalIncorrect, K_FOLD);
 		
 	}
 	
-	private static void verifyClassification(Map<String, List<DataModel>> classified) {
+	private static ClassificationResults verifyClassification(Map<String, List<DataModel>> classified) {
     	
 		int numCorrect = 0, numIncorrect = 0;
 		
@@ -103,6 +117,17 @@ public class Application {
     	
     	System.out.println("Correct classifications: " + numCorrect);
     	System.out.println("Incorrect classifications: " + numIncorrect);
+    	return new ClassificationResults(numCorrect, numIncorrect);
+		
+	}
+	
+	private static void logResults(double numCorrect, double numIncorrect, int numIterations) {
+		
+		System.out.println("\n----- RESULTS -----");
+		System.out.println("Total correct: " + numCorrect);
+		System.out.println("Total incorrect: " + numIncorrect);
+		System.out.println("Average correct: " + (numCorrect / numIterations));
+		System.out.println("Average incorrect: " + (numIncorrect / numIterations));
 		
 	}
     
