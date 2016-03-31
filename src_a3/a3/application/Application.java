@@ -15,29 +15,53 @@ import a3.model.DataModel;
 
 public class Application {
 	
+	private static final boolean USE_K_FOLD = false;
 	private static final int K_FOLD = 10;
 	
     public static void main(String[] args) throws InterruptedException, IOException {
 
 //    	List<DataModel> data = CSVParser.parseHeartDataset();
-    	List<DataModel> data = CSVParser.parseWineDataset();
-//    	List<DataModel> data = CSVParser.parseIrisDataset();
+//    	List<DataModel> data = CSVParser.parseWineDataset();
+    	List<DataModel> data = CSVParser.parseIrisDataset();
     	
 //    	System.out.println("Naive Bayesian Classifier");
 //    	testClassifier(new NaiveBayesClassifier(), data);
     	
-//    	System.out.println("Optimal Bayesian Classifier");
-//    	testClassifier(new OptimalBayesianClassifier(), data);
+    	System.out.println("Optimal Bayesian Classifier");
+    	testClassifier(new OptimalBayesianClassifier(), data);
     	
-    	System.out.println("Linear Classifier");
-    	testClassifier(new LinearClassifier(), data);
+//    	System.out.println("Linear Classifier");
+//    	testClassifier(new LinearClassifier(), data);
         
     }
     
     private static void testClassifier(IClassifier classifier, List<DataModel> data) {
     	
     	Map<String, List<DataModel>> dataClassMap = Partitioner.getClassMap(data);
-    	kFoldClassification(classifier, dataClassMap);
+    	
+    	if (USE_K_FOLD)
+    		kFoldClassification(classifier, dataClassMap);
+    	else
+    		leaveOneOutClassification(classifier, data);
+    	
+    }
+    
+    private static void leaveOneOutClassification(IClassifier classifier, List<DataModel> data) {
+
+    	for (int i=0; i<data.size(); i++) {
+    		
+    		System.out.println("Leave-one-out iteration = " + i);
+
+        	// Partition into training/test sets
+        	PartitionedData partitionedData = Partitioner.getLeaveOneOutPartitionedData(i, data);
+        	
+        	// Classify test data
+        	Map<String, List<DataModel>> classified = classifier.classify(partitionedData);
+        	
+        	// Verify whether classifications were correct or incorrect
+        	verifyClassification(classified);
+    		
+    	}
     	
     }
 	
@@ -49,7 +73,7 @@ public class Application {
     		System.out.println("K-fold iteration = " + i);
 
         	// Partition into training/test sets
-        	PartitionedData partitionedData = Partitioner.getPartitionedData(i, K_FOLD, dataClassMap);
+        	PartitionedData partitionedData = Partitioner.getKFoldPartitionedData(i, K_FOLD, dataClassMap);
         	
         	// Classify test data
         	Map<String, List<DataModel>> classified = classifier.classify(partitionedData);

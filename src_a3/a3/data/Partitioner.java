@@ -27,7 +27,20 @@ public class Partitioner {
 		
 	}
 	
-	public static PartitionedData getPartitionedData(int testGroup, int kFold, Map<String, List<DataModel>> classMap) {
+	public static PartitionedData getLeaveOneOutPartitionedData(int leaveOutIndex, List<DataModel> data) {
+
+		List<DataModel> trainingData = new ArrayList<DataModel>();
+		List<DataModel> testData = new ArrayList<DataModel>();
+		
+		testData.add(data.get(leaveOutIndex));
+		trainingData.addAll(data.subList(0, leaveOutIndex));
+		trainingData.addAll(data.subList(leaveOutIndex + 1, data.size()));
+
+		return new PartitionedData(trainingData, testData);
+		
+	}
+	
+	public static PartitionedData getKFoldPartitionedData(int testGroup, int kFold, Map<String, List<DataModel>> classMap) {
 		
 		List<DataModel> trainingData = new ArrayList<DataModel>();
 		List<DataModel> testData = new ArrayList<DataModel>();

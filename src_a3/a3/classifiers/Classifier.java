@@ -90,6 +90,31 @@ public abstract class Classifier implements IClassifier {
 		
 	}
 	
+	// TODO - Remove if not used
+	protected double[][] calcFullCovarianceMatrix2(List<DataModel> data, double[] sampleMean) {
+
+		// TODO - this is bad
+		int dimensions = data.get(0).getNumDimensions();
+		
+		double[][] result = new double[dimensions][dimensions];
+		for (int r=0; r<result.length; r++) {
+			for (int c=0; c<result.length; c++) {
+				
+				double sum = 0;
+				for (DataModel dataModel : data) {
+					sum += ((dataModel.getDimensions()[r] - sampleMean[r]) * (dataModel.getDimensions()[c] - sampleMean[c]));
+				}
+				
+				result[r][c] = sum / (data.size() -1);
+				
+			}
+			
+		}
+		
+		return result;
+
+	}
+	
 	protected double[] calculateSampleMean(List<DataModel> data) {
 		
 		// TODO - this is bad
