@@ -7,9 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.math3.linear.DecompositionSolver;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.SingularValueDecomposition;
 import org.apache.commons.math3.stat.correlation.Covariance;
 
 import a3.model.DataModel;
@@ -45,7 +47,17 @@ public abstract class Classifier implements IClassifier {
 		
 		// Inverse the covariance matrix
 		RealMatrix m = MatrixUtils.createRealMatrix(params.getCovarianceMatrix());
-		double[][] mCovInv = new LUDecomposition(m).getSolver().getInverse().getData();
+		
+		double[][] mCovInv = null;
+		DecompositionSolver solver = new LUDecomposition(m).getSolver();
+		if (solver.isNonSingular()) {
+			mCovInv = solver.getInverse().getData();
+			
+		} else {
+			DecompositionSolver singularSolver = new SingularValueDecomposition(MatrixUtils.createRealMatrix(params.getCovarianceMatrix())).getSolver();
+			mCovInv = singularSolver.getInverse().getData();			
+			
+		}
 		
 		// Transpose delta (turns into a 2D array)
 		double[][] tmDelta = transposeDelta(delta);

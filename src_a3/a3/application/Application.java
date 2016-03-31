@@ -1,6 +1,8 @@
 package a3.application;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 
@@ -21,15 +23,15 @@ public class Application {
 	
     public static void main(String[] args) throws InterruptedException, IOException {
 
-//    	List<DataModel> data = CSVParser.parseHeartDataset();
+//    	List<DataModel> data = CSVParser.parseIrisDataset();
+    	List<DataModel> data = CSVParser.parseHeartDataset();
 //    	List<DataModel> data = CSVParser.parseWineDataset();
-    	List<DataModel> data = CSVParser.parseIrisDataset();
-    	
-//    	System.out.println("Naive Bayesian Classifier");
-//    	testClassifier(new NaiveBayesClassifier(), data);
     	
     	System.out.println("Optimal Bayesian Classifier");
     	testClassifier(new OptimalBayesianClassifier(), data);
+    	
+//    	System.out.println("Naive Bayesian Classifier\n");
+//    	testClassifier(new NaiveBayesClassifier(), data);
     	
 //    	System.out.println("Linear Classifier");
 //    	testClassifier(new LinearClassifier(), data);
@@ -124,11 +126,19 @@ public class Application {
 	private static void logResults(double numCorrect, double numIncorrect, int numIterations) {
 		
 		System.out.println("\n----- RESULTS -----");
-		System.out.println("Total correct: " + numCorrect);
-		System.out.println("Total incorrect: " + numIncorrect);
-		System.out.println("Average correct: " + (numCorrect / numIterations));
-		System.out.println("Average incorrect: " + (numIncorrect / numIterations));
+		System.out.println("Total/average correct: " + numCorrect + "/" + round((numCorrect / numIterations), 4));
+		System.out.println("Total/average incorrect: " + numIncorrect + "/" + round((numIncorrect / numIterations), 4));
 		
+	}
+	
+	private static double round(double value, int places) {
+		
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    BigDecimal bd = new BigDecimal(value);
+	    bd = bd.setScale(places, RoundingMode.HALF_UP);
+	    return bd.doubleValue();
+	    
 	}
     
 }
