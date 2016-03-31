@@ -66,8 +66,8 @@ public class LinearClassifier extends Classifier {
 		// Partition data into sets for each class
 		Map<String, List<DataModel>> classMap = getClassMap(data);
 		
-		// Use the same covariance matrix for all classes
-		double[][] covariance = calcFullCovarianceMatrix(data);
+		// Use the same, diagonal covariance matrix for all classes
+		double[][] covariance = calcDiagonalCovarianceMatrix(data);
 		
 		// Do pairwise classification on all the classes
 		for (String className : classMap.keySet()) {

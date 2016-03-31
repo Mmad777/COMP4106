@@ -12,9 +12,11 @@ import a3.classifiers.LinearClassifier;
 import a3.classifiers.NaiveBayesClassifier;
 import a3.classifiers.OptimalBayesianClassifier;
 import a3.data.CSVParser;
+import a3.data.DataSet;
 import a3.data.Partitioner;
 import a3.data.Partitioner.PartitionedData;
 import a3.model.DataModel;
+import a3.trees.DecisionTreeClassifier;
 
 public class Application {
 	
@@ -23,29 +25,31 @@ public class Application {
 	
     public static void main(String[] args) throws InterruptedException, IOException {
 
-//    	List<DataModel> data = CSVParser.parseIrisDataset();
-    	List<DataModel> data = CSVParser.parseHeartDataset();
-//    	List<DataModel> data = CSVParser.parseWineDataset();
+//    	DataSet dataSet = CSVParser.parseIrisDataset();
+//    	DataSet dataSet = CSVParser.parseHeartDataset();
+//    	DataSet dataSet = CSVParser.parseWineDataset();
     	
-    	System.out.println("Optimal Bayesian Classifier");
-    	testClassifier(new OptimalBayesianClassifier(), data);
+    	System.out.println("Dataset: " + dataSet.getName());
+    	
+//    	System.out.println("Optimal Bayesian Classifier\n");
+//    	testClassifier(new OptimalBayesianClassifier(), dataSet);
     	
 //    	System.out.println("Naive Bayesian Classifier\n");
-//    	testClassifier(new NaiveBayesClassifier(), data);
+//    	testClassifier(new NaiveBayesClassifier(), dataSet);
     	
-//    	System.out.println("Linear Classifier");
-//    	testClassifier(new LinearClassifier(), data);
+    	System.out.println("Linear Classifier\n");
+    	testClassifier(new LinearClassifier(), dataSet);
         
     }
     
-    private static void testClassifier(IClassifier classifier, List<DataModel> data) {
+    private static void testClassifier(IClassifier classifier, DataSet dataSet) {
     	
-    	Map<String, List<DataModel>> dataClassMap = Partitioner.getClassMap(data);
+    	Map<String, List<DataModel>> dataClassMap = Partitioner.getClassMap(dataSet.getData());
     	
     	if (USE_K_FOLD)
     		kFoldClassification(classifier, dataClassMap);
     	else
-    		leaveOneOutClassification(classifier, data);
+    		leaveOneOutClassification(classifier, dataSet.getData());
     	
     }
     

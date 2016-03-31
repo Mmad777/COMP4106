@@ -73,19 +73,5 @@ public class NaiveBayesClassifier extends Classifier {
 		return statsMap;
 		
 	}
-	
-	private double[][] calcDiagonalCovarianceMatrix(List<DataModel> data) {
-		
-		double[][] matrix = calcFullCovarianceMatrix(data);
-		
-		for (int r=0; r<matrix.length; r++) {
-			for (int c=0; c<matrix.length; c++) {
-				if (r != c) matrix[r][c] = 0;
-			}
-		}
-		
-		return matrix;
-		
-	}
 
 }

@@ -14,6 +14,10 @@ public class DataModel {
 		return dimensions.length;
 	}
 	
+	public double getDimension(int index) {
+		return dimensions[index];
+	}
+	
 	public double[] getDimensions() {
 		return dimensions;
 	}

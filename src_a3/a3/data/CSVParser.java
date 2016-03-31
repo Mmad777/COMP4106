@@ -19,7 +19,7 @@ public class CSVParser {
 	private final static String HEART_PATH = DATASETS_DIR + "heartDisease.csv";
 	private final static String WINE_PATH = DATASETS_DIR + "wine.csv";
 	
-	public static List<DataModel> parseHeartDataset() throws IOException {
+	public static DataSet parseHeartDataset() throws IOException {
 		
 		List<DataModel> result = new ArrayList<DataModel>();
 		
@@ -29,12 +29,12 @@ public class CSVParser {
 			result.add(new DataModel(features, e[13]));		
 		});	    
 	    reader.close();
-	    
-	    return result;
+
+	    return new DataSet("Heart", 13, result);
 		
 	}
 	
-	public static List<DataModel> parseIrisDataset() throws IOException {
+	public static DataSet parseIrisDataset() throws IOException {
 		
 		List<DataModel> result = new ArrayList<DataModel>();
 		
@@ -45,11 +45,11 @@ public class CSVParser {
 		});	    
 	    reader.close();
 	    
-	    return result;
+	    return new DataSet("Iris", 4, result);
 		
 	}
 	
-	public static List<DataModel> parseWineDataset() throws IOException {
+	public static DataSet parseWineDataset() throws IOException {
 		
 		List<DataModel> result = new ArrayList<DataModel>();
 		
@@ -59,8 +59,8 @@ public class CSVParser {
 			result.add(new DataModel(features, e[13]));			
 		});	    
 	    reader.close();
-	    
-	    return result;
+
+	    return new DataSet("Wine", 13, result);
 		
 	}
 	

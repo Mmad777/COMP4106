@@ -21,7 +21,6 @@ public abstract class Classifier implements IClassifier {
 	protected final static int NUM_DEC_DIGITS 	= 12;
 	private final static boolean LOG 			= false;
 	
-	
 	protected Map<String, List<DataModel>> getClassMap(List<DataModel> dataMap) {
 		
 		Map<String, List<DataModel>> classMap = new HashMap<String, List<DataModel>>();
@@ -104,29 +103,18 @@ public abstract class Classifier implements IClassifier {
 		
 	}
 	
-	// TODO - Remove if not used
-	protected double[][] calcFullCovarianceMatrix2(List<DataModel> data, double[] sampleMean) {
-
-		// TODO - this is bad
-		int dimensions = data.get(0).getNumDimensions();
+	protected double[][] calcDiagonalCovarianceMatrix(List<DataModel> data) {
 		
-		double[][] result = new double[dimensions][dimensions];
-		for (int r=0; r<result.length; r++) {
-			for (int c=0; c<result.length; c++) {
-				
-				double sum = 0;
-				for (DataModel dataModel : data) {
-					sum += ((dataModel.getDimensions()[r] - sampleMean[r]) * (dataModel.getDimensions()[c] - sampleMean[c]));
-				}
-				
-				result[r][c] = sum / (data.size() -1);
-				
+		double[][] matrix = calcFullCovarianceMatrix(data);
+		
+		for (int r=0; r<matrix.length; r++) {
+			for (int c=0; c<matrix.length; c++) {
+				if (r != c) matrix[r][c] = 0;
 			}
-			
 		}
 		
-		return result;
-
+		return matrix;
+		
 	}
 	
 	protected double[] calculateSampleMean(List<DataModel> data) {
