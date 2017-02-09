@@ -1,6 +1,6 @@
 # COMP4106 - Artificial Intelligence
 
-Course assignments.
+Course assignments. Written in Java using JavaFX for the UI.
 
 ## A1
 Uses Breadth First Search (BFS), Depth First Search (DFS), and A\* (with two different heuristics) to play a chess-based variation of the snake game called the "Knight Game".
